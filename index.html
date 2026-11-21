@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Lightweight QR Code Generator for VIP Passes -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
   <style>
     :root {
@@ -32,7 +31,6 @@
       --font-mono: 'JetBrains Mono', monospace;
     }
 
-    /* Fixed Global Reset */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -48,7 +46,6 @@
       min-height: 100vh;
     }
 
-    /* Interactive Circuit Canvas */
     #pcb-canvas {
       position: fixed;
       inset: 0;
@@ -64,13 +61,11 @@
       z-index: 1;
     }
 
-    /* Scrollbar */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: var(--bg-primary); }
     ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; border: 1px solid var(--border-subtle); }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent-mint); }
 
-    /* Navigation */
     header {
       position: sticky;
       top: 0;
@@ -209,7 +204,6 @@
       font-size: 1.1rem;
     }
 
-    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -268,7 +262,6 @@
       border-radius: 8px;
     }
 
-    /* Ripple & Click Pulse Animation */
     .pulse-click {
       animation: cardClickPulse 0.55s cubic-bezier(0.22, 1, 0.36, 1);
     }
@@ -279,7 +272,6 @@
       100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 245, 160, 0); }
     }
 
-    /* PCB Section Divider */
     .pcb-divider {
       max-width: 1240px;
       margin: 0 auto;
@@ -306,7 +298,6 @@
       text-shadow: 0 0 10px rgba(255, 184, 0, 0.45);
     }
 
-    /* Scroll Reveal Animations */
     .reveal {
       opacity: 0;
       transform: translateY(24px);
@@ -318,7 +309,6 @@
       transform: translateY(0);
     }
 
-    /* Sections */
     section {
       max-width: 1240px;
       margin: 0 auto;
@@ -359,7 +349,6 @@
       font-size: 1rem;
     }
 
-    /* Hero Section */
     .hero {
       padding-top: 3.5rem;
       padding-bottom: 4.5rem;
@@ -441,7 +430,6 @@
     .meta-val.gold { color: var(--accent-gold); }
     .meta-val.mint { color: var(--accent-mint); }
 
-    /* Countdown */
     .countdown-wrap {
       margin-bottom: 2rem;
     }
@@ -499,7 +487,6 @@
       flex-wrap: wrap;
     }
 
-    /* Hero Emblem Showcase with HUD Radar Ring */
     .hero-visual {
       display: flex;
       justify-content: center;
@@ -570,7 +557,6 @@
       padding-top: 0.75rem;
     }
 
-    /* Color-Coded Events Grid & Animated Cards */
     .events-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
@@ -594,7 +580,6 @@
       transform-style: preserve-3d;
     }
 
-    /* Glowing PCB Sweep Border on Hover */
     .event-card::before {
       content: '';
       position: absolute;
@@ -719,7 +704,6 @@
       z-index: 2;
     }
 
-    /* Registration Form & Panels */
     .panel {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
@@ -788,7 +772,6 @@
       min-height: 1rem;
     }
 
-    /* Dynamic Team Container */
     .team-section {
       grid-column: 1 / -1;
       background: rgba(6, 10, 18, 0.75);
@@ -841,7 +824,6 @@
       gap: 0.85rem;
     }
 
-    /* VIP Boarding Pass & QR Code Styling */
     .ticket-box {
       display: none;
       margin-top: 1.75rem;
@@ -904,7 +886,6 @@
       letter-spacing: 0.08em;
     }
 
-    /* My Registrations & Lookup */
     .lookup-bar {
       display: flex;
       gap: 0.85rem;
@@ -959,7 +940,6 @@
       align-items: center;
     }
 
-    /* Schedule Timeline with Connected Track */
     .schedule-list {
       position: relative;
       display: grid;
@@ -1036,7 +1016,6 @@
       white-space: nowrap;
     }
 
-    /* FAQ Accordion */
     .faq-list {
       max-width: 860px;
       margin: 0 auto;
@@ -1093,7 +1072,6 @@
       padding-bottom: 1.15rem;
     }
 
-    /* Organiser Dashboard */
     .org-lock-box {
       max-width: 440px;
       margin: 0 auto;
@@ -1176,7 +1154,6 @@
       background: rgba(0, 245, 160, 0.04);
     }
 
-    /* Rules Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -1211,7 +1188,6 @@
       gap: 0.5rem;
     }
 
-    /* Footer */
     footer {
       border-top: 1px solid var(--border-subtle);
       background: #04070D;
@@ -1248,7 +1224,6 @@
       color: var(--accent-mint);
     }
 
-    /* Toast Notification */
     .toast {
       position: fixed;
       bottom: 1.5rem;
@@ -1269,7 +1244,6 @@
       transform: translateY(0);
     }
 
-    /* Responsive */
     @media (max-width: 960px) {
       .hero { grid-template-columns: 1fr; text-align: center; }
       .hero-tagline { margin-inline: auto; }
@@ -1304,11 +1278,9 @@
 </head>
 <body>
 
-  <!-- Cursor-Reactive PCB Background -->
   <canvas id="pcb-canvas"></canvas>
 
   <div class="app-wrapper">
-    <!-- Header -->
     <header>
       <div class="nav-container">
         <a href="#home" class="brand">
@@ -1330,16 +1302,15 @@
         </nav>
 
         <div class="nav-actions">
-          <span class="db-pill" id="dbStatusBadge" title="Database Connection Status">
+          <span class="db-pill" id="dbStatusBadge" title="Firebase Connection Status">
             <span class="db-dot"></span>
-            <span id="dbStatusText">DEMO SYNC</span>
+            <span id="dbStatusText">FIREBASE LIVE</span>
           </span>
           <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation">☰</button>
         </div>
       </div>
     </header>
 
-    <!-- Hero Section -->
     <section id="home" class="hero">
       <div class="reveal">
         <div class="hero-badge">⚡ ELECTRONICS CLUB PRESENTS • MITS GWALIOR</div>
@@ -1396,7 +1367,6 @@
 
     <div class="pcb-divider"><span>◈ ARENA MATRIX ◈</span></div>
 
-    <!-- Events Section -->
     <section id="events">
       <div class="section-header reveal">
         <span class="section-tag">// COMPETITIVE ARENAS</span>
@@ -1411,13 +1381,12 @@
 
     <div class="pcb-divider"><span>◈ ONBOARDING GATEWAY ◈</span></div>
 
-    <!-- Registration Section -->
     <section id="register">
       <div class="section-header reveal">
         <span class="section-tag">// PARTICIPANT ONBOARDING</span>
         <h2 class="section-title">Event Registration</h2>
         <p class="section-desc">
-          Complete your entry below. Duplicate enrollment numbers or emails for the same event are automatically blocked.
+          Complete your entry below. Duplicate enrollment numbers for the same event are blocked at the database level.
         </p>
       </div>
 
@@ -1497,7 +1466,6 @@
               <span class="error-msg" id="err-participationType"></span>
             </div>
 
-            <!-- Dynamic Team Details Section -->
             <div class="team-section" id="teamSection">
               <div class="team-header">
                 <div>
@@ -1532,7 +1500,6 @@
           </div>
         </form>
 
-        <!-- VIP Boarding Pass & Live QR Code -->
         <div class="ticket-box" id="ticketBox">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
             <span style="color: var(--accent-mint); font-family: var(--font-mono); font-weight: 700;">✔ VIP ENTRY PASS GENERATED</span>
@@ -1559,32 +1526,26 @@
 
     <div class="pcb-divider"><span>◈ PASS VERIFICATION ◈</span></div>
 
-    <!-- My Registrations Lookup -->
     <section id="my-registrations">
       <div class="section-header reveal">
         <span class="section-tag">// PARTICIPANT PORTAL</span>
         <h2 class="section-title">My Registrations</h2>
         <p class="section-desc">
-          Retrieve your scannable VIP pass, assigned venue, and team roster using your <strong>College Email</strong>, <strong>Enrollment Number</strong>, or <strong>Registration ID</strong>.
+          Retrieve your scannable VIP pass generated on this device using your <strong>College Email</strong>, <strong>Enrollment Number</strong>, or <strong>Registration ID</strong>.
         </p>
       </div>
 
       <div class="panel reveal">
         <div class="lookup-bar">
-          <input type="text" id="lookupInput" placeholder="Enter Registration ID (e.g. TN26-1042), Email, or Enrollment No.">
+          <input type="text" id="lookupInput" placeholder="Enter Registration ID (e.g. TN26-4812), Email, or Enrollment No.">
           <button type="button" class="btn btn-primary" id="lookupBtn">Find Pass</button>
         </div>
-        <div class="lookup-results" id="lookupResults">
-          <p style="text-align: center; color: var(--text-muted); grid-column: 1 / -1; font-size: 0.9rem;">
-            Try searching demo ID <strong>TN26-1042</strong> or register above to view your live QR VIP pass.
-          </p>
-        </div>
+        <div class="lookup-results" id="lookupResults"></div>
       </div>
     </section>
 
     <div class="pcb-divider"><span>◈ CHRONO SEQUENCE ◈</span></div>
 
-    <!-- Event Schedule -->
     <section id="schedule">
       <div class="section-header reveal">
         <span class="section-tag">// 25 DECEMBER 2026 TIMELINE</span>
@@ -1642,7 +1603,6 @@
 
     <div class="pcb-divider"><span>◈ KNOWLEDGE BASE ◈</span></div>
 
-    <!-- FAQ Section -->
     <section id="faq">
       <div class="section-header reveal">
         <span class="section-tag">// KNOWLEDGE BASE</span>
@@ -1660,7 +1620,7 @@
         </div>
         <div class="faq-item">
           <button class="faq-q" type="button">What if a teammate is already registered for the same event? <span class="icon">+</span></button>
-          <div class="faq-a">Our system prevents duplicate entries per event using Enrollment Numbers and College Emails. A student cannot appear in two registrations for the same event.</div>
+          <div class="faq-a">Our database enforces a unique lock per Enrollment Number per event. A student cannot appear in two registrations for the same event.</div>
         </div>
         <div class="faq-item">
           <button class="faq-q" type="button">Will components and lab equipment be provided for Circuitrix? <span class="icon">+</span></button>
@@ -1671,46 +1631,44 @@
 
     <div class="pcb-divider"><span>◈ COMMAND TERMINAL ◈</span></div>
 
-    <!-- Organiser Portal (Locked) -->
+    <!-- Organiser Portal (Protected by Firebase Email/Password Auth) -->
     <section id="organiser">
       <div class="section-header reveal">
-        <span class="section-tag">// RESTRICTED ACCESS</span>
+        <span class="section-tag">// FIREBASE AUTHENTICATED ACCESS</span>
         <h2 class="section-title">Organiser Console</h2>
         <p class="section-desc">Authorized Electronics Club coordinators only.</p>
       </div>
 
       <div class="panel reveal">
-        <!-- Lock Screen -->
         <div class="org-lock-box" id="orgLockBox">
           <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🔐</div>
-          <h3 style="font-family: var(--font-display); font-size: 1.15rem; margin-bottom: 0.4rem;">AUTHENTICATION REQUIRED</h3>
+          <h3 style="font-family: var(--font-display); font-size: 1.15rem; margin-bottom: 0.4rem;">COORDINATOR SIGN-IN</h3>
           <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
-            Enter organiser credentials to inspect registrations and export CSV reports.
+            Sign in with your authorized Firebase coordinator email to inspect live registrations and export CSV reports.
           </p>
           <form id="orgLoginForm" style="display: grid; gap: 0.85rem; text-align: left;">
             <div class="form-group">
-              <label for="orgUser">Username</label>
-              <input type="text" id="orgUser" placeholder="Enter username" required>
+              <label for="orgEmail">Coordinator Email</label>
+              <input type="email" id="orgEmail" placeholder="e.g., 26el1pi83@mitsgwl.ac.in" required>
             </div>
             <div class="form-group">
               <label for="orgPass">Password</label>
-              <input type="password" id="orgPass" placeholder="Enter password" required>
+              <input type="password" id="orgPass" placeholder="Enter Firebase password" required>
             </div>
             <span class="error-msg" id="orgLoginError"></span>
-            <button type="submit" class="btn btn-gold" style="width: 100%;">Unlock Console</button>
+            <button type="submit" class="btn btn-gold" id="orgLoginBtn" style="width: 100%;">Unlock Console</button>
           </form>
         </div>
 
-        <!-- Unlocked Dashboard -->
         <div class="org-dashboard" id="orgDashboard">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
             <div>
-              <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-mint);">● SESSION ACTIVE: PIYUSH123</span>
+              <span id="orgActiveEmail" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-mint);">● AUTHENTICATED SESSION</span>
               <h3 style="font-family: var(--font-display); font-size: 1.25rem;">Live Registration Telemetry</h3>
             </div>
             <div style="display: flex; gap: 0.65rem;">
               <button type="button" class="btn btn-primary btn-sm" id="exportCsvBtn">⬇ Export CSV</button>
-              <button type="button" class="btn btn-outline btn-sm" id="orgLogoutBtn">Lock Console</button>
+              <button type="button" class="btn btn-outline btn-sm" id="orgLogoutBtn">Sign Out & Lock</button>
             </div>
           </div>
 
@@ -1747,7 +1705,6 @@
       </div>
     </section>
 
-    <!-- Footer / Contact -->
     <footer id="contact">
       <div class="footer-inner">
         <div>
@@ -1786,7 +1743,6 @@
     </footer>
   </div>
 
-  <!-- Event Rules Modal -->
   <div class="modal-backdrop" id="rulesModal">
     <div class="modal-card">
       <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1803,20 +1759,26 @@
     </div>
   </div>
 
-  <!-- Toast -->
   <div class="toast" id="toast"></div>
 
-  <!-- Main Application Script (Firebase Ready + Demo Fallback) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
       getFirestore,
       collection,
+      doc,
+      setDoc,
       addDoc,
       onSnapshot,
       query,
       orderBy
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const FIREBASE_CONFIG = {
       apiKey: "AIzaSyDaexx5K9d36gOSZDaD_bj2Y6ehTpicxK8",
@@ -1827,7 +1789,10 @@
       appId: "1:921474312501:web:2ef8aa677f72a2f897447c"
     };
 
-    // Color-Coded Event Catalog
+    const app = initializeApp(FIREBASE_CONFIG);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
     const EVENTS = [
       {
         id: "Robo Wars",
@@ -1899,122 +1864,60 @@
       }
     ];
 
-    const DEMO_REGISTRATIONS = [
-      {
-        regId: "TN26-1042",
-        fullName: "Aarav Sharma",
-        enrollmentNo: "26EL1AR12",
-        collegeEmail: "26el1ar12@mitsgwl.ac.in",
-        contactNumber: "9826011223",
-        department: "Electronics Engineering",
-        year: "2nd Year",
-        event: "Robo Wars",
-        venue: "Stage Garden",
-        participationType: "Team",
-        teamName: "MechaTitans",
-        teamSize: 3,
-        members: [
-          { name: "Rohan Verma", enrollmentNo: "26EL1RV29", mobile: "9826044556" },
-          { name: "Sneha Gupta", enrollmentNo: "26ET1SG14", mobile: "9826077889" }
-        ],
-        createdAt: "2026-11-18T10:15:00.000Z"
-      },
-      {
-        regId: "TN26-2089",
-        fullName: "Ananya Jain",
-        enrollmentNo: "26CS1AJ45",
-        collegeEmail: "26cs1aj45@mitsgwl.ac.in",
-        contactNumber: "9179022334",
-        department: "Computer Science & Engineering",
-        year: "1st Year",
-        event: "Code Clash",
-        venue: "Conclave Centre",
-        participationType: "Individual",
-        teamName: "-",
-        teamSize: 1,
-        members: [],
-        createdAt: "2026-11-18T11:40:00.000Z"
-      },
-      {
-        regId: "TN26-3156",
-        fullName: "Devansh Tiwari",
-        enrollmentNo: "26EL1DT08",
-        collegeEmail: "26el1dt08@mitsgwl.ac.in",
-        contactNumber: "9425133445",
-        department: "Electronics Engineering",
-        year: "3rd Year",
-        event: "Circuitrix",
-        venue: "J115, 1st Floor, Electronics Dept.",
-        participationType: "Team",
-        teamName: "OscilloscopeX",
-        teamSize: 2,
-        members: [
-          { name: "Kunal Joshi", enrollmentNo: "26EL1KJ19", mobile: "9425199887" }
-        ],
-        createdAt: "2026-11-18T14:20:00.000Z"
-      }
-    ];
-
-    let registrations = [];
-    let db = null;
-    let useFirebase = false;
+    let adminRegistrations = [];
+    let unsubscribeAdmin = null;
     let latestGeneratedRecord = null;
-    const STORAGE_KEY = "technova_2026_registrations_v1";
+    const LOCAL_PASSES_KEY = "my_technova_2026_passes";
 
-    async function initDatabase() {
-      const isConfigured =
-        FIREBASE_CONFIG.apiKey &&
-        FIREBASE_CONFIG.apiKey !== "YOUR_FIREBASE_API_KEY" &&
-        FIREBASE_CONFIG.projectId !== "YOUR_PROJECT_ID";
-
-      if (isConfigured) {
-        try {
-          const app = initializeApp(FIREBASE_CONFIG);
-          db = getFirestore(app);
-          useFirebase = true;
-          document.getElementById("dbStatusText").textContent = "FIREBASE LIVE";
-
-          const q = query(collection(db, "registrations"), orderBy("createdAt", "desc"));
-          onSnapshot(q, (snapshot) => {
-            registrations = snapshot.docs.map(doc => ({ docId: doc.id, ...doc.data() }));
-            renderOrganiserTable();
-          });
-          return;
-        } catch (err) {
-          console.error("Firebase init failed, falling back to local mode:", err);
-        }
+    function getLocalPasses() {
+      try {
+        return JSON.parse(localStorage.getItem(LOCAL_PASSES_KEY) || "[]");
+      } catch {
+        return [];
       }
-
-      useFirebase = false;
-      document.getElementById("dbStatusText").textContent = "DEMO MODE";
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        registrations = JSON.parse(saved);
-      } else {
-        registrations = [...DEMO_REGISTRATIONS];
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(registrations));
-      }
-      renderOrganiserTable();
     }
 
-    async function saveRegistration(record) {
-      if (useFirebase && db) {
-        await addDoc(collection(db, "registrations"), record);
-      } else {
-        registrations.unshift(record);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(registrations));
-        renderOrganiserTable();
-      }
+    function saveLocalPass(record) {
+      const list = getLocalPasses();
+      list.unshift(record);
+      localStorage.setItem(LOCAL_PASSES_KEY, JSON.stringify(list));
     }
 
     function showToast(msg) {
       const toast = document.getElementById("toast");
       toast.textContent = msg;
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 3200);
+      setTimeout(() => toast.classList.remove("show"), 3400);
     }
 
-    // QR Code Generator Helper
+    onAuthStateChanged(auth, (user) => {
+      const lockBox = document.getElementById("orgLockBox");
+      const dashboard = document.getElementById("orgDashboard");
+
+      if (user) {
+        lockBox.style.display = "none";
+        dashboard.classList.add("active");
+        document.getElementById("orgActiveEmail").textContent = `● AUTHENTICATED: ${user.email.toUpperCase()}`;
+
+        const q = query(collection(db, "registrations"), orderBy("createdAt", "desc"));
+        unsubscribeAdmin = onSnapshot(q, (snapshot) => {
+          adminRegistrations = snapshot.docs.map(d => ({ docId: d.id, ...d.data() }));
+          renderOrganiserTable();
+        }, (err) => {
+          console.error("Firestore read error:", err);
+          showToast("Firestore rules blocked read. Check security rules.");
+        });
+      } else {
+        if (unsubscribeAdmin) {
+          unsubscribeAdmin();
+          unsubscribeAdmin = null;
+        }
+        adminRegistrations = [];
+        dashboard.classList.remove("active");
+        lockBox.style.display = "block";
+      }
+    });
+
     function renderQrInto(element, record) {
       if (!element) return;
       element.innerHTML = "";
@@ -2033,7 +1936,6 @@
       }
     }
 
-    // Download VIP Pass as PNG Canvas
     function downloadPassPng(record) {
       if (!record) return;
       const canvas = document.createElement("canvas");
@@ -2041,19 +1943,16 @@
       canvas.height = 380;
       const ctx = canvas.getContext("2d");
 
-      // Background
       const grad = ctx.createLinearGradient(0, 0, 760, 380);
       grad.addColorStop(0, "#060A12");
       grad.addColorStop(1, "#0D182A");
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, 760, 380);
 
-      // Border
       ctx.strokeStyle = "#00F5A0";
       ctx.lineWidth = 4;
       ctx.strokeRect(14, 14, 732, 352);
 
-      // Header Band
       ctx.fillStyle = "#FFB800";
       ctx.font = "bold 24px sans-serif";
       ctx.fillText("TECHNOVA 2026 • VIP ENTRY PASS", 40, 62);
@@ -2062,7 +1961,6 @@
       ctx.font = "15px monospace";
       ctx.fillText("ELECTRONICS CLUB • MITS GWALIOR • 25 DEC 2026", 40, 88);
 
-      // Divider
       ctx.strokeStyle = "rgba(255, 184, 0, 0.4)";
       ctx.setLineDash([8, 6]);
       ctx.beginPath();
@@ -2071,7 +1969,6 @@
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Details
       ctx.fillStyle = "#00F5A0";
       ctx.font = "bold 32px monospace";
       ctx.fillText(record.regId, 40, 155);
@@ -2095,7 +1992,6 @@
       ctx.font = "13px monospace";
       ctx.fillText("Carry valid MITS ID card. Report 30 mins prior to event slot.", 40, 332);
 
-      // Embed QR image if available
       const qrImg = document.querySelector("#ticketQrCode img");
       if (qrImg && qrImg.src) {
         ctx.fillStyle = "#FFFFFF";
@@ -2114,7 +2010,6 @@
       downloadPassPng(latestGeneratedRecord);
     });
 
-    // Render Color-Coded Events Grid with Staggered Reveal
     function renderEvents() {
       const grid = document.getElementById("eventsGrid");
       grid.innerHTML = EVENTS.map((ev, idx) => `
@@ -2181,8 +2076,7 @@
 
           const eventName = btn.dataset.event;
           setTimeout(() => {
-            const eventSelect = document.getElementById("selectedEvent");
-            eventSelect.value = eventName;
+            document.getElementById("selectedEvent").value = eventName;
             document.getElementById("register").scrollIntoView({ behavior: "smooth" });
             showToast(`Selected "${eventName}" — complete your details below.`);
           }, 260);
@@ -2190,7 +2084,6 @@
       });
     }
 
-    // Rules Modal Logic
     let activeModalEvent = null;
     function openRulesModal(eventId) {
       const ev = EVENTS.find(item => item.id === eventId);
@@ -2217,7 +2110,6 @@
       }
     });
 
-    // Dynamic Team Members Rendering
     const participationTypeEl = document.getElementById("participationType");
     const teamSectionEl = document.getElementById("teamSection");
     const teamSizeEl = document.getElementById("teamSize");
@@ -2265,7 +2157,6 @@
 
     teamSizeEl.addEventListener("change", renderTeamMemberFields);
 
-    // Form Validation & Duplicate Prevention
     function setFieldError(id, msg) {
       const input = document.getElementById(id);
       const err = document.getElementById(`err-${id}`);
@@ -2274,12 +2165,8 @@
     }
 
     function generateUniqueId() {
-      let id;
-      do {
-        const num = Math.floor(1000 + Math.random() * 9000);
-        id = `TN26-${num}`;
-      } while (registrations.some(r => r.regId === id));
-      return id;
+      const num = Math.floor(1000 + Math.random() * 9000);
+      return `TN26-${num}`;
     }
 
     document.getElementById("registrationForm").addEventListener("submit", async (e) => {
@@ -2357,53 +2244,54 @@
         return;
       }
 
-      const sameEventRegs = registrations.filter(r => r.event === selectedEvent);
-      for (const existing of sameEventRegs) {
-        const existingEnrolls = [
-          existing.enrollmentNo,
-          ...(existing.members || []).map(m => m.enrollmentNo)
-        ];
-
-        const conflictEnroll = [...seenEnrollments].find(en => existingEnrolls.includes(en));
-        if (conflictEnroll) {
-          setFieldError("enrollmentNo", `Enrollment ${conflictEnroll} is already registered for ${selectedEvent}.`);
-          showToast(`Duplicate blocked: ${conflictEnroll} already registered in ${selectedEvent}!`);
-          return;
-        }
-
-        if (existing.collegeEmail.toLowerCase() === collegeEmail) {
-          setFieldError("collegeEmail", `Email already registered for ${selectedEvent} (ID: ${existing.regId}).`);
-          showToast(`Duplicate blocked: Email already registered for ${selectedEvent}!`);
-          return;
-        }
-      }
-
-      const eventMeta = EVENTS.find(ev => ev.id === selectedEvent);
-      const regId = generateUniqueId();
-
-      const newRecord = {
-        regId,
-        fullName,
-        enrollmentNo,
-        collegeEmail,
-        contactNumber,
-        department,
-        year,
-        event: selectedEvent,
-        venue: eventMeta ? eventMeta.venue : "MITS Campus",
-        participationType,
-        teamName,
-        teamSize,
-        members,
-        createdAt: new Date().toISOString()
-      };
-
       const submitBtn = document.getElementById("submitBtn");
       submitBtn.disabled = true;
-      submitBtn.textContent = "Generating VIP Pass...";
+      submitBtn.textContent = "Verifying & Generating Pass...";
 
       try {
-        await saveRegistration(newRecord);
+        const eventSlug = selectedEvent.replace(/\s+/g, "_");
+        const regId = generateUniqueId();
+        const createdAt = new Date().toISOString();
+
+        for (const enroll of seenEnrollments) {
+          const lockId = `${eventSlug}_${enroll}`;
+          try {
+            await setDoc(doc(db, "reg_locks", lockId), {
+              regId,
+              event: selectedEvent,
+              enrollmentNo: enroll,
+              createdAt
+            });
+          } catch (lockErr) {
+            if (lockErr.code === "permission-denied") {
+              setFieldError("enrollmentNo", `Enrollment ${enroll} is already registered for ${selectedEvent}.`);
+              showToast(`Duplicate blocked: ${enroll} already registered in ${selectedEvent}!`);
+              return;
+            }
+            throw lockErr;
+          }
+        }
+
+        const eventMeta = EVENTS.find(ev => ev.id === selectedEvent);
+        const newRecord = {
+          regId,
+          fullName,
+          enrollmentNo,
+          collegeEmail,
+          contactNumber,
+          department,
+          year,
+          event: selectedEvent,
+          venue: eventMeta ? eventMeta.venue : "MITS Campus",
+          participationType,
+          teamName,
+          teamSize,
+          members,
+          createdAt
+        };
+
+        await addDoc(collection(db, "registrations"), newRecord);
+        saveLocalPass(newRecord);
         latestGeneratedRecord = newRecord;
 
         document.getElementById("generatedRegId").textContent = regId;
@@ -2416,7 +2304,11 @@
         document.getElementById("ticketBox").classList.add("active");
         document.getElementById("registrationForm").reset();
         teamSectionEl.classList.remove("active");
+        renderLocalPassesList(getLocalPasses());
         showToast(`Success! VIP Pass ${regId} generated.`);
+      } catch (err) {
+        console.error("Registration error:", err);
+        showToast("Network or permission error while registering. Please try again.");
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = "Confirm & Generate VIP Pass";
@@ -2429,31 +2321,14 @@
       showToast(`Copied ${idText} to clipboard!`);
     });
 
-    // My Registrations Lookup with Live QR Cards
-    function handleLookup() {
-      const queryStr = document.getElementById("lookupInput").value.trim().toLowerCase();
+    function renderLocalPassesList(list) {
       const container = document.getElementById("lookupResults");
-      if (!queryStr) {
-        showToast("Enter a Registration ID, Email, or Enrollment Number.");
+      if (!list || list.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color: var(--text-muted); grid-column: 1/-1; font-size: 0.9rem;">No passes saved on this device yet. Register above to generate your scannable VIP pass.</p>`;
         return;
       }
 
-      const matches = registrations.filter(r => {
-        const memberEnrolls = (r.members || []).map(m => m.enrollmentNo.toLowerCase());
-        return (
-          r.regId.toLowerCase() === queryStr ||
-          r.collegeEmail.toLowerCase() === queryStr ||
-          r.enrollmentNo.toLowerCase() === queryStr ||
-          memberEnrolls.includes(queryStr)
-        );
-      });
-
-      if (matches.length === 0) {
-        container.innerHTML = `<p style="text-align:center; color: var(--accent-danger); grid-column: 1/-1;">No registration found matching "${queryStr}".</p>`;
-        return;
-      }
-
-      container.innerHTML = matches.map((r, i) => `
+      container.innerHTML = list.map((r, i) => `
         <div class="pass-card">
           <div class="pass-card-header">
             <span style="font-family: var(--font-display); color: var(--accent-gold); font-weight: 700;">${r.regId}</span>
@@ -2476,9 +2351,36 @@
         </div>
       `).join("");
 
-      matches.forEach((r, i) => {
+      list.forEach((r, i) => {
         renderQrInto(document.getElementById(`lookup-qr-${i}`), r);
       });
+    }
+
+    function handleLookup() {
+      const queryStr = document.getElementById("lookupInput").value.trim().toLowerCase();
+      const sourcePool = adminRegistrations.length ? adminRegistrations : getLocalPasses();
+
+      if (!queryStr) {
+        renderLocalPassesList(sourcePool);
+        return;
+      }
+
+      const matches = sourcePool.filter(r => {
+        const memberEnrolls = (r.members || []).map(m => m.enrollmentNo.toLowerCase());
+        return (
+          r.regId.toLowerCase() === queryStr ||
+          r.collegeEmail.toLowerCase() === queryStr ||
+          r.enrollmentNo.toLowerCase() === queryStr ||
+          memberEnrolls.includes(queryStr)
+        );
+      });
+
+      if (matches.length === 0) {
+        document.getElementById("lookupResults").innerHTML = `<p style="text-align:center; color: var(--accent-danger); grid-column: 1/-1;">No pass found matching "${queryStr}" on this device.</p>`;
+        return;
+      }
+
+      renderLocalPassesList(matches);
     }
 
     document.getElementById("lookupBtn").addEventListener("click", handleLookup);
@@ -2486,39 +2388,39 @@
       if (e.key === "Enter") handleLookup();
     });
 
-    // Organiser Authentication & Console
-    const ORG_USER = "piyush123";
-    const ORG_PASS = "Piyush@135";
-
-    document.getElementById("orgLoginForm").addEventListener("submit", (e) => {
+    document.getElementById("orgLoginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const u = document.getElementById("orgUser").value.trim();
-      const p = document.getElementById("orgPass").value;
+      const email = document.getElementById("orgEmail").value.trim();
+      const pass = document.getElementById("orgPass").value;
       const err = document.getElementById("orgLoginError");
+      const btn = document.getElementById("orgLoginBtn");
 
-      if (u === ORG_USER && p === ORG_PASS) {
-        err.textContent = "";
-        document.getElementById("orgLockBox").style.display = "none";
-        document.getElementById("orgDashboard").classList.add("active");
-        renderOrganiserTable();
+      err.textContent = "";
+      btn.disabled = true;
+      btn.textContent = "Authenticating...";
+
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        document.getElementById("orgLoginForm").reset();
         showToast("Organiser Console Unlocked.");
-      } else {
-        err.textContent = "Access Denied: Invalid username or password.";
+      } catch (authErr) {
+        err.textContent = "Access Denied: Invalid coordinator email or password.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Unlock Console";
       }
     });
 
-    document.getElementById("orgLogoutBtn").addEventListener("click", () => {
-      document.getElementById("orgDashboard").classList.remove("active");
-      document.getElementById("orgLockBox").style.display = "block";
-      document.getElementById("orgLoginForm").reset();
-      showToast("Organiser Console Locked.");
+    document.getElementById("orgLogoutBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      showToast("Signed out & Console Locked.");
     });
 
     function getFilteredRegistrations() {
       const search = (document.getElementById("orgSearchInput").value || "").trim().toLowerCase();
       const eventFilter = document.getElementById("orgEventFilter").value;
 
-      return registrations.filter(r => {
+      return adminRegistrations.filter(r => {
         const matchesEvent = eventFilter === "ALL" || r.event === eventFilter;
         if (!matchesEvent) return false;
         if (!search) return true;
@@ -2540,12 +2442,12 @@
       if (statsRow) {
         const counts = EVENTS.map(ev => ({
           name: ev.id,
-          count: registrations.filter(r => r.event === ev.id).length
+          count: adminRegistrations.filter(r => r.event === ev.id).length
         }));
         statsRow.innerHTML = `
           <div class="stat-card">
             <div class="meta-label">Total Entries</div>
-            <div class="stat-num" style="color: var(--accent-gold);">${registrations.length}</div>
+            <div class="stat-num" style="color: var(--accent-gold);">${adminRegistrations.length}</div>
           </div>
           ${counts.map(c => `
             <div class="stat-card">
@@ -2652,7 +2554,6 @@
       showToast(`Exported ${list.length} records to CSV.`);
     });
 
-    // Live Countdown Timer with Pulse Tick on Seconds
     function updateCountdown() {
       const target = new Date("December 25, 2026 09:30:00").getTime();
       const now = Date.now();
@@ -2678,19 +2579,16 @@
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // FAQ Accordion
     document.querySelectorAll(".faq-q").forEach(btn => {
       btn.addEventListener("click", () => {
         btn.parentElement.classList.toggle("open");
       });
     });
 
-    // Mobile Menu Toggle
     document.getElementById("mobileMenuBtn").addEventListener("click", () => {
       document.getElementById("navLinks").classList.toggle("open");
     });
 
-    // Scroll Reveal & Navbar Scroll-Spy
     function initScrollObservers() {
       const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -2718,7 +2616,6 @@
       }, { passive: true });
     }
 
-    // Cursor-Reactive PCB Trace Canvas Animation
     function initPcbCanvas() {
       const canvas = document.getElementById("pcb-canvas");
       const ctx = canvas.getContext("2d");
@@ -2750,7 +2647,6 @@
       function draw() {
         ctx.clearRect(0, 0, w, h);
 
-        // Subtle PCB Grid
         ctx.strokeStyle = "rgba(0, 245, 160, 0.032)";
         ctx.lineWidth = 1;
         const step = 64;
@@ -2761,7 +2657,6 @@
           ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
         }
 
-        // Cursor Spotlight Halo
         if (pointer.x > 0 && pointer.y > 0) {
           const halo = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, 190);
           halo.addColorStop(0, "rgba(0, 245, 160, 0.09)");
@@ -2770,7 +2665,6 @@
           ctx.fillRect(0, 0, w, h);
         }
 
-        // Orthogonal Circuit Traces between Nodes & Cursor
         for (let i = 0; i < nodes.length; i++) {
           const a = nodes[i];
           a.x += a.vx;
@@ -2778,7 +2672,6 @@
           if (a.x < 0 || a.x > w) a.vx *= -1;
           if (a.y < 0 || a.y > h) a.vy *= -1;
 
-          // Connect node to cursor with golden PCB trace
           const ptrDist = Math.hypot(a.x - pointer.x, a.y - pointer.y);
           if (ptrDist < 190) {
             const alpha = (1 - ptrDist / 190) * 0.55;
@@ -2820,11 +2713,10 @@
       draw();
     }
 
-    // Initialize Everything
     renderEvents();
+    renderLocalPassesList(getLocalPasses());
     initScrollObservers();
     initPcbCanvas();
-    initDatabase();
   </script>
 </body>
 </html>
