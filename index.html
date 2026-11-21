@@ -1,0 +1,2830 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TECHNOVA 2026 | Electronics Club — MITS Gwalior</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lightweight QR Code Generator for VIP Passes -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+  <style>
+    :root {
+      --bg-primary: #060A12;
+      --bg-secondary: #0B111E;
+      --bg-card: rgba(13, 20, 34, 0.86);
+      --bg-card-hover: rgba(18, 28, 48, 0.95);
+      --accent-mint: #00F5A0;
+      --accent-mint-dim: rgba(0, 245, 160, 0.14);
+      --accent-gold: #FFB800;
+      --accent-gold-dim: rgba(255, 184, 0, 0.14);
+      --accent-cyan: #00D4FF;
+      --accent-purple: #B57BFF;
+      --accent-danger: #FF4D6D;
+      --text-primary: #F1F5F9;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --border-subtle: rgba(0, 245, 160, 0.18);
+      --border-gold: rgba(255, 184, 0, 0.3);
+      --font-display: 'Orbitron', sans-serif;
+      --font-body: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    /* Fixed Global Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Interactive Circuit Canvas */
+    #pcb-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.65;
+    }
+
+    .app-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; border: 1px solid var(--border-subtle); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-mint); }
+
+    /* Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(6, 10, 18, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand img, .brand-svg-fallback {
+      height: 44px;
+      width: 44px;
+      object-fit: contain;
+      border-radius: 8px;
+      filter: drop-shadow(0 0 8px rgba(0, 245, 160, 0.35));
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      background: linear-gradient(90deg, var(--accent-gold), var(--accent-mint));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent-mint);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent-mint);
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .db-pill {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(0, 245, 160, 0.08);
+      color: var(--accent-mint);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .db-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-mint);
+      box-shadow: 0 0 8px var(--accent-mint);
+      animation: pulseDot 1.6s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      padding: 0.45rem 0.65rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 0.7rem 1.35rem;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-mint), #00C982);
+      color: #04100B;
+      font-weight: 700;
+      box-shadow: 0 0 20px rgba(0, 245, 160, 0.28);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 26px rgba(0, 245, 160, 0.45);
+    }
+
+    .btn-gold {
+      background: rgba(255, 184, 0, 0.12);
+      border-color: var(--border-gold);
+      color: var(--accent-gold);
+    }
+
+    .btn-gold:hover {
+      background: rgba(255, 184, 0, 0.22);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: rgba(13, 20, 34, 0.7);
+      border-color: var(--border-subtle);
+      color: var(--text-primary);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent-mint);
+      color: var(--accent-mint);
+    }
+
+    .btn-sm {
+      padding: 0.45rem 0.9rem;
+      font-size: 0.82rem;
+      border-radius: 8px;
+    }
+
+    /* Ripple & Click Pulse Animation */
+    .pulse-click {
+      animation: cardClickPulse 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes cardClickPulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 245, 160, 0.7); }
+      40% { transform: scale(0.97); box-shadow: 0 0 0 14px rgba(0, 245, 160, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 245, 160, 0); }
+    }
+
+    /* PCB Section Divider */
+    .pcb-divider {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0.75;
+    }
+
+    .pcb-divider::before,
+    .pcb-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 245, 160, 0.35), transparent);
+    }
+
+    .pcb-divider span {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-gold);
+      letter-spacing: 0.2em;
+      text-shadow: 0 0 10px rgba(255, 184, 0, 0.45);
+    }
+
+    /* Scroll Reveal Animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Sections */
+    section {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 4.5rem 1.25rem;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--accent-mint);
+      background: var(--accent-mint-dim);
+      border: 1px solid var(--border-subtle);
+      padding: 0.28rem 0.8rem;
+      border-radius: 999px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.65rem;
+    }
+
+    .section-desc {
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto;
+      font-size: 1rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding-top: 3.5rem;
+      padding-bottom: 4.5rem;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent-gold);
+      background: var(--accent-gold-dim);
+      border: 1px solid var(--border-gold);
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.3rem, 5vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: 0.04em;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 span.gold {
+      color: var(--accent-gold);
+      text-shadow: 0 0 24px rgba(255, 184, 0, 0.3);
+    }
+
+    .hero h1 span.mint {
+      color: var(--accent-mint);
+      text-shadow: 0 0 24px rgba(0, 245, 160, 0.3);
+    }
+
+    .hero-tagline {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.75rem;
+      max-width: 580px;
+    }
+
+    .hero-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+      margin-bottom: 2rem;
+    }
+
+    .meta-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+    }
+
+    .meta-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .meta-val {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      margin-top: 0.2rem;
+    }
+
+    .meta-val.gold { color: var(--accent-gold); }
+    .meta-val.mint { color: var(--accent-mint); }
+
+    /* Countdown */
+    .countdown-wrap {
+      margin-bottom: 2rem;
+    }
+
+    .countdown-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .countdown-grid {
+      display: flex;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+    }
+
+    .time-block {
+      background: rgba(13, 20, 34, 0.95);
+      border: 1px solid rgba(0, 212, 255, 0.28);
+      border-radius: 12px;
+      padding: 0.85rem 1.15rem;
+      min-width: 82px;
+      text-align: center;
+      box-shadow: inset 0 0 18px rgba(0, 212, 255, 0.06);
+    }
+
+    .time-num {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .time-num.tick {
+      transform: scale(1.12);
+      color: var(--accent-mint);
+    }
+
+    .time-unit {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent-cyan);
+      margin-top: 0.35rem;
+      text-transform: uppercase;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Hero Emblem Showcase with HUD Radar Ring */
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .hud-ring {
+      position: absolute;
+      width: 390px;
+      height: 390px;
+      border-radius: 50%;
+      border: 1px dashed rgba(0, 245, 160, 0.28);
+      animation: spinSlow 28s linear infinite;
+      pointer-events: none;
+    }
+
+    .hud-ring::before {
+      content: '';
+      position: absolute;
+      inset: 14px;
+      border-radius: 50%;
+      border: 1px dotted rgba(255, 184, 0, 0.28);
+      animation: spinSlowReverse 18s linear infinite;
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes spinSlowReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+
+    .emblem-card {
+      position: relative;
+      background: radial-gradient(circle at center, rgba(0, 245, 160, 0.14), rgba(13, 20, 34, 0.92) 70%);
+      border: 1px solid var(--border-gold);
+      border-radius: 24px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 35px rgba(255, 184, 0, 0.14);
+      transition: transform 0.3s ease;
+    }
+
+    .emblem-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .emblem-card img {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      border-radius: 14px;
+      display: block;
+      margin: 0 auto 1rem;
+    }
+
+    .telemetry-bar {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent-mint);
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 0.75rem;
+    }
+
+    /* Color-Coded Events Grid & Animated Cards */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+      gap: 1.5rem;
+      perspective: 1100px;
+    }
+
+    .event-card {
+      --card-accent: var(--accent-mint);
+      --card-accent-dim: rgba(0, 245, 160, 0.12);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 1.65rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+      transform-style: preserve-3d;
+    }
+
+    /* Glowing PCB Sweep Border on Hover */
+    .event-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--card-accent), transparent);
+      transition: left 0.65s ease;
+    }
+
+    .event-card:hover::before {
+      left: 120%;
+    }
+
+    .event-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--card-accent-dim), transparent 62%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .event-card:hover::after {
+      opacity: 1;
+    }
+
+    .event-card:hover {
+      border-color: var(--card-accent);
+      background: var(--bg-card-hover);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55), 0 0 26px var(--card-accent-dim);
+    }
+
+    .event-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .event-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--card-accent-dim);
+      border: 1px solid var(--card-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      transition: transform 0.3s ease;
+    }
+
+    .event-card:hover .event-icon {
+      transform: scale(1.1) rotate(-4deg);
+    }
+
+    .event-code {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--card-accent);
+      background: var(--card-accent-dim);
+      padding: 0.22rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid var(--card-accent);
+    }
+
+    .event-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.55rem;
+      color: var(--text-primary);
+    }
+
+    .event-desc {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.2rem;
+    }
+
+    .event-specs {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      background: rgba(6, 10, 18, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 0.85rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.83rem;
+    }
+
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .spec-key {
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .spec-val {
+      color: var(--text-primary);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .spec-val.venue { color: var(--card-accent); }
+
+    .event-actions {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 0.65rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Registration Form & Panels */
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    label span.req {
+      color: var(--accent-gold);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      background: #070C16;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      padding: 0.75rem 0.95rem;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent-mint);
+      box-shadow: 0 0 0 3px rgba(0, 245, 160, 0.14);
+    }
+
+    input.invalid, select.invalid {
+      border-color: var(--accent-danger);
+    }
+
+    .error-msg {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      color: var(--accent-danger);
+      min-height: 1rem;
+    }
+
+    /* Dynamic Team Container */
+    .team-section {
+      grid-column: 1 / -1;
+      background: rgba(6, 10, 18, 0.75);
+      border: 1px dashed var(--border-gold);
+      border-radius: 14px;
+      padding: 1.35rem;
+      display: none;
+      animation: fadeSlideIn 0.3s ease;
+    }
+
+    .team-section.active {
+      display: block;
+    }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .team-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.1rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .team-member-card {
+      background: rgba(13, 20, 34, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 0.9rem;
+    }
+
+    .member-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      margin-bottom: 0.65rem;
+      display: block;
+    }
+
+    .member-fields {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+    }
+
+    /* VIP Boarding Pass & QR Code Styling */
+    .ticket-box {
+      display: none;
+      margin-top: 1.75rem;
+      background: linear-gradient(135deg, rgba(0, 245, 160, 0.1), rgba(255, 184, 0, 0.08));
+      border: 1px solid var(--accent-mint);
+      border-radius: 16px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ticket-box.active {
+      display: block;
+      animation: fadeSlideIn 0.35s ease;
+    }
+
+    .vip-pass-body {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.25rem;
+      align-items: center;
+      background: #060A12;
+      padding: 1.15rem 1.35rem;
+      border-radius: 12px;
+      border: 1px dashed var(--accent-gold);
+      margin: 0.9rem 0;
+      position: relative;
+    }
+
+    .vip-pass-body::before,
+    .vip-pass-body::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      background: #0D1422;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      border: 1px solid var(--accent-mint);
+    }
+
+    .vip-pass-body::before { left: -10px; }
+    .vip-pass-body::after { right: -10px; }
+
+    .qr-box {
+      background: #FFFFFF;
+      padding: 8px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 18px rgba(0, 245, 160, 0.25);
+    }
+
+    .reg-id-text {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      color: var(--accent-gold);
+      letter-spacing: 0.08em;
+    }
+
+    /* My Registrations & Lookup */
+    .lookup-bar {
+      display: flex;
+      gap: 0.85rem;
+      max-width: 680px;
+      margin: 0 auto 2rem;
+    }
+
+    .lookup-results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .pass-card {
+      background: linear-gradient(145deg, #080E1A, #0C1526);
+      border: 1px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 1.35rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .pass-card::before,
+    .pass-card::after {
+      content: '';
+      position: absolute;
+      top: 56px;
+      width: 16px;
+      height: 16px;
+      background: var(--bg-secondary);
+      border-radius: 50%;
+      border: 1px solid var(--border-gold);
+    }
+
+    .pass-card::before { left: -9px; }
+    .pass-card::after { right: -9px; }
+
+    .pass-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.16);
+      padding-bottom: 0.85rem;
+      margin-bottom: 0.95rem;
+    }
+
+    .pass-card-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.9rem;
+      align-items: center;
+    }
+
+    /* Schedule Timeline with Connected Track */
+    .schedule-list {
+      position: relative;
+      display: grid;
+      gap: 1.15rem;
+      max-width: 900px;
+      margin: 0 auto;
+      padding-left: 2rem;
+    }
+
+    .schedule-list::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 18px;
+      bottom: 18px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent-gold), var(--accent-mint), var(--accent-cyan));
+      box-shadow: 0 0 12px rgba(0, 245, 160, 0.35);
+    }
+
+    .schedule-item {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 1.2rem 1.5rem;
+      display: grid;
+      grid-template-columns: 165px 1fr auto;
+      align-items: center;
+      gap: 1.25rem;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+
+    .schedule-item::before {
+      content: '';
+      position: absolute;
+      left: -2.02rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--bg-primary);
+      border: 2px solid var(--accent-mint);
+      box-shadow: 0 0 10px var(--accent-mint);
+    }
+
+    .schedule-item:hover {
+      border-color: var(--accent-gold);
+      transform: translateX(4px);
+    }
+
+    .schedule-item:hover::before {
+      background: var(--accent-gold);
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 12px var(--accent-gold);
+    }
+
+    .sched-time {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-mint);
+      font-weight: 600;
+    }
+
+    .sched-venue {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--accent-cyan);
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* FAQ Accordion */
+    .faq-list {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .faq-q {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 1.1rem 1.35rem;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .faq-q span.icon {
+      color: var(--accent-mint);
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      transition: transform 0.25s;
+    }
+
+    .faq-item.open .faq-q span.icon {
+      transform: rotate(45deg);
+      color: var(--accent-gold);
+    }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 1.35rem;
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .faq-item.open .faq-a {
+      max-height: 220px;
+      padding-bottom: 1.15rem;
+    }
+
+    /* Organiser Dashboard */
+    .org-lock-box {
+      max-width: 440px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .org-dashboard {
+      display: none;
+    }
+
+    .org-dashboard.active {
+      display: block;
+      animation: fadeSlideIn 0.35s ease;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: #070C16;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--accent-mint);
+    }
+
+    .org-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-bottom: 1.25rem;
+      align-items: center;
+    }
+
+    .org-controls input { flex: 2; min-width: 220px; }
+    .org-controls select { flex: 1; min-width: 170px; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      background: #060A12;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+
+    th {
+      background: #0D1422;
+      color: var(--accent-gold);
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      vertical-align: top;
+    }
+
+    tr:hover td {
+      background: rgba(0, 245, 160, 0.04);
+    }
+
+    /* Rules Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 6, 12, 0.82);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #0D1422;
+      border: 1px solid var(--accent-mint);
+      border-radius: 18px;
+      max-width: 540px;
+      width: 100%;
+      padding: 1.75rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
+      animation: fadeSlideIn 0.25s ease;
+    }
+
+    .modal-card ul {
+      margin: 1rem 0 1.5rem 1.25rem;
+      color: var(--text-secondary);
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      background: #04070D;
+      padding: 3rem 1.25rem 2rem;
+      margin-top: 3rem;
+    }
+
+    .footer-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .contact-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      background: rgba(13, 20, 34, 0.9);
+      border: 1px solid var(--border-subtle);
+      padding: 0.55rem 0.9rem;
+      border-radius: 10px;
+      margin-top: 0.6rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .contact-chip:hover {
+      border-color: var(--accent-mint);
+      color: var(--accent-mint);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: #0D1422;
+      border: 1px solid var(--accent-mint);
+      color: var(--text-primary);
+      padding: 0.85rem 1.2rem;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      z-index: 120;
+      transform: translateY(140%);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .hero { grid-template-columns: 1fr; text-align: center; }
+      .hero-tagline { margin-inline: auto; }
+      .countdown-grid { justify-content: center; }
+      .hero-cta-group { justify-content: center; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .hud-ring { width: 320px; height: 320px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #080D18;
+        flex-direction: column;
+        padding: 1.25rem;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .nav-links.open { display: flex; }
+      .mobile-menu-btn { display: inline-block; }
+      .hero-meta-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .member-fields { grid-template-columns: 1fr; }
+      .schedule-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .lookup-bar { flex-direction: column; }
+      .vip-pass-body { grid-template-columns: 1fr; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor-Reactive PCB Background -->
+  <canvas id="pcb-canvas"></canvas>
+
+  <div class="app-wrapper">
+    <!-- Header -->
+    <header>
+      <div class="nav-container">
+        <a href="#home" class="brand">
+          <img src="TechNova 2026 Circuit Emblem.png" alt="TECHNOVA 2026 Logo" onerror="this.outerHTML='<svg class=\'brand-svg-fallback\' viewBox=\'0 0 64 64\' fill=\'none\'><rect x=\'4\' y=\'4\' width=\'56\' height=\'56\' rx=\'12\' fill=\'#0D1422\' stroke=\'#00F5A0\' stroke-width=\'2.5\'/><path d=\'M20 20H44V44H20V20Z\' stroke=\'#FFB800\' stroke-width=\'2\'/><circle cx=\'32\' cy=\'32\' r=\'6\' fill=\'#00F5A0\'/><path d=\'M32 4V20M32 44V60M4 32H20M44 32H60\' stroke=\'#00F5A0\' stroke-width=\'2\'/></svg>'">
+          <div class="brand-text">
+            <span class="brand-title">TECHNOVA 2026</span>
+            <span class="brand-sub">Electronics Club • MITS</span>
+          </div>
+        </a>
+
+        <nav class="nav-links" id="navLinks">
+          <a href="#events">Events</a>
+          <a href="#register">Register</a>
+          <a href="#my-registrations">My Pass</a>
+          <a href="#schedule">Schedule</a>
+          <a href="#faq">FAQ</a>
+          <a href="#organiser">Organiser</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <div class="nav-actions">
+          <span class="db-pill" id="dbStatusBadge" title="Database Connection Status">
+            <span class="db-dot"></span>
+            <span id="dbStatusText">DEMO SYNC</span>
+          </span>
+          <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation">☰</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="reveal">
+        <div class="hero-badge">⚡ ELECTRONICS CLUB PRESENTS • MITS GWALIOR</div>
+        <h1>
+          <span class="gold">TECHNOVA</span> <span class="mint">2026</span>
+        </h1>
+        <p class="hero-tagline">
+          Where silicon meets strategy. Compete across combat robotics, algorithmic sprints, live circuit debugging, and high-voltage tech trivia.
+        </p>
+
+        <div class="hero-meta-grid">
+          <div class="meta-box">
+            <div class="meta-label">Event Date</div>
+            <div class="meta-val mint">25 December 2026</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-label">Reg. Deadline</div>
+            <div class="meta-val gold">20 December 2026</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-label">Campus Hub</div>
+            <div class="meta-val">MITS Gwalior</div>
+          </div>
+        </div>
+
+        <div class="countdown-wrap">
+          <div class="countdown-label">// T-MINUS TO IGNITION (25 DEC 2026 • 09:30 IST)</div>
+          <div class="countdown-grid" id="countdown">
+            <div class="time-block"><div class="time-num" id="cd-days">00</div><div class="time-unit">Days</div></div>
+            <div class="time-block"><div class="time-num" id="cd-hours">00</div><div class="time-unit">Hours</div></div>
+            <div class="time-block"><div class="time-num" id="cd-mins">00</div><div class="time-unit">Mins</div></div>
+            <div class="time-block"><div class="time-num" id="cd-secs">00</div><div class="time-unit">Secs</div></div>
+          </div>
+        </div>
+
+        <div class="hero-cta-group">
+          <a href="#register" class="btn btn-primary">Register Now →</a>
+          <a href="#events" class="btn btn-outline">Explore 4 Arenas</a>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal" style="transition-delay: 120ms;">
+        <div class="hud-ring"></div>
+        <div class="emblem-card">
+          <img src="TechNova 2026 Circuit Emblem.png" alt="TECHNOVA 2026 Official Circuit Emblem" onerror="this.outerHTML='<svg viewBox=\'0 0 260 220\' width=\'260\' height=\'220\' style=\'margin:0 auto 1rem;display:block;\'><rect x=\'55\' y=\'35\' width=\'150\' height=\'150\' rx=\'20\' fill=\'#070D19\' stroke=\'#FFB800\' stroke-width=\'3\'/><rect x=\'85\' y=\'65\' width=\'90\' height=\'90\' rx=\'12\' fill=\'#0D1829\' stroke=\'#00F5A0\' stroke-width=\'2.5\'/><text x=\'130\' y=\'116\' text-anchor=\'middle\' fill=\'#00F5A0\' font-family=\'Orbitron,sans-serif\' font-size=\'22\' font-weight=\'800\'>TN26</text><path d=\'M95 10V35M130 10V35M165 10V35M95 185V210M130 185V210M165 185V210M30 75H55M30 110H55M30 145H55M205 75H230M205 110H230M205 145H230\' stroke=\'#00D4FF\' stroke-width=\'3\' stroke-linecap=\'round\'/></svg>'">
+          <div class="telemetry-bar">
+            <span>FREQ: 2.40 GHz</span>
+            <span>MAX TEAM: 4</span>
+            <span>STATUS: OPEN</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="pcb-divider"><span>◈ ARENA MATRIX ◈</span></div>
+
+    <!-- Events Section -->
+    <section id="events">
+      <div class="section-header reveal">
+        <span class="section-tag">// COMPETITIVE ARENAS</span>
+        <h2 class="section-title">Featured Events</h2>
+        <p class="section-desc">
+          All four events are open to both <strong>Individual</strong> contenders and <strong>Teams (up to 4 members)</strong>. Registrations close on <strong>20 December 2026</strong>.
+        </p>
+      </div>
+
+      <div class="events-grid" id="eventsGrid"></div>
+    </section>
+
+    <div class="pcb-divider"><span>◈ ONBOARDING GATEWAY ◈</span></div>
+
+    <!-- Registration Section -->
+    <section id="register">
+      <div class="section-header reveal">
+        <span class="section-tag">// PARTICIPANT ONBOARDING</span>
+        <h2 class="section-title">Event Registration</h2>
+        <p class="section-desc">
+          Complete your entry below. Duplicate enrollment numbers or emails for the same event are automatically blocked.
+        </p>
+      </div>
+
+      <div class="panel reveal">
+        <form id="registrationForm" novalidate>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="fullName">Full Name (Lead / Individual) <span class="req">*</span></label>
+              <input type="text" id="fullName" placeholder="e.g., Piyush Ojha" required>
+              <span class="error-msg" id="err-fullName"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="enrollmentNo">Enrollment Number <span class="req">*</span></label>
+              <input type="text" id="enrollmentNo" placeholder="e.g., 26EL1PI83" style="text-transform: uppercase;" required>
+              <span class="error-msg" id="err-enrollmentNo"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="collegeEmail">College Email <span class="req">*</span></label>
+              <input type="email" id="collegeEmail" placeholder="e.g., 26el1pi83@mitsgwl.ac.in" required>
+              <span class="error-msg" id="err-collegeEmail"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="contactNumber">Contact Number <span class="req">*</span></label>
+              <input type="tel" id="contactNumber" placeholder="10-digit mobile number" maxlength="10" required>
+              <span class="error-msg" id="err-contactNumber"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="department">Department <span class="req">*</span></label>
+              <select id="department" required>
+                <option value="">Select Department</option>
+                <option value="Electronics Engineering">Electronics Engineering</option>
+                <option value="Electronics & Telecommunication">Electronics & Telecommunication</option>
+                <option value="Computer Science & Engineering">Computer Science & Engineering</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Electrical Engineering">Electrical Engineering</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Civil Engineering">Civil Engineering</option>
+                <option value="AI & Robotics">AI & Robotics</option>
+              </select>
+              <span class="error-msg" id="err-department"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="year">Academic Year <span class="req">*</span></label>
+              <select id="year" required>
+                <option value="">Select Year</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+              </select>
+              <span class="error-msg" id="err-year"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="selectedEvent">Select Event <span class="req">*</span></label>
+              <select id="selectedEvent" required>
+                <option value="">Choose an Event</option>
+                <option value="Robo Wars">Robo Wars — Stage Garden</option>
+                <option value="Code Clash">Code Clash — Conclave Centre</option>
+                <option value="Circuitrix">Circuitrix — J115, 1st Floor, Electronics Dept.</option>
+                <option value="Tech Quiz">Tech Quiz — Colloquium Hall</option>
+              </select>
+              <span class="error-msg" id="err-selectedEvent"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="participationType">Participation Type <span class="req">*</span></label>
+              <select id="participationType" required>
+                <option value="Individual">Individual (Solo)</option>
+                <option value="Team">Team (2 to 4 Members)</option>
+              </select>
+              <span class="error-msg" id="err-participationType"></span>
+            </div>
+
+            <!-- Dynamic Team Details Section -->
+            <div class="team-section" id="teamSection">
+              <div class="team-header">
+                <div>
+                  <strong style="color: var(--accent-gold); font-family: var(--font-display); font-size: 0.95rem;">TEAM ROSTER CONFIGURATION</strong>
+                  <p style="font-size: 0.8rem; color: var(--text-secondary);">You are Member 1 (Team Lead). Enter details for your additional teammates below.</p>
+                </div>
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                  <div class="form-group" style="min-width: 180px;">
+                    <label for="teamName">Team Name <span class="req">*</span></label>
+                    <input type="text" id="teamName" placeholder="e.g., VoltVipers">
+                    <span class="error-msg" id="err-teamName"></span>
+                  </div>
+                  <div class="form-group" style="min-width: 150px;">
+                    <label for="teamSize">Total Team Size <span class="req">*</span></label>
+                    <select id="teamSize">
+                      <option value="2">2 Members</option>
+                      <option value="3">3 Members</option>
+                      <option value="4">4 Members (Max)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div id="teamMembersContainer"></div>
+            </div>
+
+            <div class="form-group full" style="margin-top: 0.5rem;">
+              <button type="submit" class="btn btn-primary" id="submitBtn" style="width: 100%; padding: 0.95rem; font-size: 1rem;">
+                Confirm & Generate VIP Pass
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- VIP Boarding Pass & Live QR Code -->
+        <div class="ticket-box" id="ticketBox">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <span style="color: var(--accent-mint); font-family: var(--font-mono); font-weight: 700;">✔ VIP ENTRY PASS GENERATED</span>
+            <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary);">VALID: 25 DEC 2026 • MITS GWALIOR</span>
+          </div>
+          <div class="vip-pass-body">
+            <div>
+              <div style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--text-muted);">UNIQUE REGISTRATION ID</div>
+              <div class="reg-id-text" id="generatedRegId">TN26-0000</div>
+              <div id="ticketSummary" style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.55rem;"></div>
+              <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin-top: 0.85rem;">
+                <button type="button" class="btn btn-gold btn-sm" id="copyIdBtn">Copy ID</button>
+                <button type="button" class="btn btn-outline btn-sm" id="downloadPassBtn">⬇ Save Pass PNG</button>
+              </div>
+            </div>
+            <div style="text-align: center;">
+              <div class="qr-box" id="ticketQrCode"></div>
+              <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); margin-top: 0.35rem;">SCAN AT GATE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="pcb-divider"><span>◈ PASS VERIFICATION ◈</span></div>
+
+    <!-- My Registrations Lookup -->
+    <section id="my-registrations">
+      <div class="section-header reveal">
+        <span class="section-tag">// PARTICIPANT PORTAL</span>
+        <h2 class="section-title">My Registrations</h2>
+        <p class="section-desc">
+          Retrieve your scannable VIP pass, assigned venue, and team roster using your <strong>College Email</strong>, <strong>Enrollment Number</strong>, or <strong>Registration ID</strong>.
+        </p>
+      </div>
+
+      <div class="panel reveal">
+        <div class="lookup-bar">
+          <input type="text" id="lookupInput" placeholder="Enter Registration ID (e.g. TN26-1042), Email, or Enrollment No.">
+          <button type="button" class="btn btn-primary" id="lookupBtn">Find Pass</button>
+        </div>
+        <div class="lookup-results" id="lookupResults">
+          <p style="text-align: center; color: var(--text-muted); grid-column: 1 / -1; font-size: 0.9rem;">
+            Try searching demo ID <strong>TN26-1042</strong> or register above to view your live QR VIP pass.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="pcb-divider"><span>◈ CHRONO SEQUENCE ◈</span></div>
+
+    <!-- Event Schedule -->
+    <section id="schedule">
+      <div class="section-header reveal">
+        <span class="section-tag">// 25 DECEMBER 2026 TIMELINE</span>
+        <h2 class="section-title">Event Schedule</h2>
+        <p class="section-desc">Reporting starts 30 minutes prior to each slot. Carry your valid MITS college ID card.</p>
+      </div>
+
+      <div class="schedule-list">
+        <div class="schedule-item reveal">
+          <div class="sched-time">09:30 AM – 10:15 AM</div>
+          <div>
+            <strong>Inauguration & Safety Briefing</strong>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);">Opening ceremony by Electronics Club faculty & student coordinators.</div>
+          </div>
+          <span class="sched-venue">Colloquium Hall</span>
+        </div>
+
+        <div class="schedule-item reveal">
+          <div class="sched-time">10:30 AM – 01:30 PM</div>
+          <div>
+            <strong>Robo Wars (Qualifiers & Combat Rounds)</strong>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);">Bot weight/dimension check followed by knockout arena battles.</div>
+          </div>
+          <span class="sched-venue">Stage Garden</span>
+        </div>
+
+        <div class="schedule-item reveal">
+          <div class="sched-time">11:00 AM – 01:00 PM</div>
+          <div>
+            <strong>Circuitrix (Hardware Design & Fault Hunt)</strong>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);">Oscilloscope diagnostics, breadboard prototyping, and PCB bug-fix sprint.</div>
+          </div>
+          <span class="sched-venue">J115, 1st Floor, Electronics Dept.</span>
+        </div>
+
+        <div class="schedule-item reveal">
+          <div class="sched-time">02:00 PM – 04:00 PM</div>
+          <div>
+            <strong>Code Clash (Algorithmic & Embedded Logic)</strong>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);">Competitive problem solving in C/C++/Python under strict time limits.</div>
+          </div>
+          <span class="sched-venue">Conclave Centre</span>
+        </div>
+
+        <div class="schedule-item reveal">
+          <div class="sched-time">04:15 PM – 05:30 PM</div>
+          <div>
+            <strong>Tech Quiz & Valedictory Ceremony</strong>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);">Rapid-fire buzzer finale across semiconductors, space tech & computing, followed by prize distribution.</div>
+          </div>
+          <span class="sched-venue">Colloquium Hall</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="pcb-divider"><span>◈ KNOWLEDGE BASE ◈</span></div>
+
+    <!-- FAQ Section -->
+    <section id="faq">
+      <div class="section-header reveal">
+        <span class="section-tag">// KNOWLEDGE BASE</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+      </div>
+
+      <div class="faq-list reveal" id="faqList">
+        <div class="faq-item">
+          <button class="faq-q" type="button">Can I participate in multiple events at TECHNOVA 2026? <span class="icon">+</span></button>
+          <div class="faq-a">Yes! You can register for multiple events as long as you submit a separate registration for each event before 20 December 2026.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">What is the maximum team size allowed? <span class="icon">+</span></button>
+          <div class="faq-a">Every event supports both Individual (1 member) and Team participation with a strict maximum of 4 members per team.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">What if a teammate is already registered for the same event? <span class="icon">+</span></button>
+          <div class="faq-a">Our system prevents duplicate entries per event using Enrollment Numbers and College Emails. A student cannot appear in two registrations for the same event.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">Will components and lab equipment be provided for Circuitrix? <span class="icon">+</span></button>
+          <div class="faq-a">Yes, breadboards, ICs, multimeters, power supplies, and DSOs will be provided at J115, 1st Floor, Electronics Department.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="pcb-divider"><span>◈ COMMAND TERMINAL ◈</span></div>
+
+    <!-- Organiser Portal (Locked) -->
+    <section id="organiser">
+      <div class="section-header reveal">
+        <span class="section-tag">// RESTRICTED ACCESS</span>
+        <h2 class="section-title">Organiser Console</h2>
+        <p class="section-desc">Authorized Electronics Club coordinators only.</p>
+      </div>
+
+      <div class="panel reveal">
+        <!-- Lock Screen -->
+        <div class="org-lock-box" id="orgLockBox">
+          <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🔐</div>
+          <h3 style="font-family: var(--font-display); font-size: 1.15rem; margin-bottom: 0.4rem;">AUTHENTICATION REQUIRED</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+            Enter organiser credentials to inspect registrations and export CSV reports.
+          </p>
+          <form id="orgLoginForm" style="display: grid; gap: 0.85rem; text-align: left;">
+            <div class="form-group">
+              <label for="orgUser">Username</label>
+              <input type="text" id="orgUser" placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+              <label for="orgPass">Password</label>
+              <input type="password" id="orgPass" placeholder="Enter password" required>
+            </div>
+            <span class="error-msg" id="orgLoginError"></span>
+            <button type="submit" class="btn btn-gold" style="width: 100%;">Unlock Console</button>
+          </form>
+        </div>
+
+        <!-- Unlocked Dashboard -->
+        <div class="org-dashboard" id="orgDashboard">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+            <div>
+              <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-mint);">● SESSION ACTIVE: PIYUSH123</span>
+              <h3 style="font-family: var(--font-display); font-size: 1.25rem;">Live Registration Telemetry</h3>
+            </div>
+            <div style="display: flex; gap: 0.65rem;">
+              <button type="button" class="btn btn-primary btn-sm" id="exportCsvBtn">⬇ Export CSV</button>
+              <button type="button" class="btn btn-outline btn-sm" id="orgLogoutBtn">Lock Console</button>
+            </div>
+          </div>
+
+          <div class="stats-row" id="orgStatsRow"></div>
+
+          <div class="org-controls">
+            <input type="text" id="orgSearchInput" placeholder="Search by Name, Reg ID, Enrollment No., Email, or Team...">
+            <select id="orgEventFilter">
+              <option value="ALL">All Events</option>
+              <option value="Robo Wars">Robo Wars</option>
+              <option value="Code Clash">Code Clash</option>
+              <option value="Circuitrix">Circuitrix</option>
+              <option value="Tech Quiz">Tech Quiz</option>
+            </select>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Reg ID</th>
+                  <th>Event & Venue</th>
+                  <th>Type / Team</th>
+                  <th>Lead / Participant</th>
+                  <th>Enrollment & Dept</th>
+                  <th>Contact</th>
+                  <th>Members Roster</th>
+                </tr>
+              </thead>
+              <tbody id="orgTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer / Contact -->
+    <footer id="contact">
+      <div class="footer-inner">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.85rem;">
+            <img src="TechNova 2026 Circuit Emblem.png" alt="Logo" style="height: 40px; width: 40px; border-radius: 8px;" onerror="this.style.display='none'">
+            <span class="brand-title" style="font-size: 1.2rem;">TECHNOVA 2026</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.9rem; max-width: 380px;">
+            Annual Flagship Technical Fest organized by the <strong>Electronics Club</strong>, Madhav Institute of Technology & Science (MITS), Gwalior.
+          </p>
+        </div>
+
+        <div>
+          <h4 style="font-family: var(--font-display); font-size: 0.95rem; color: var(--accent-gold); margin-bottom: 0.6rem;">EVENT VENUES</h4>
+          <ul style="list-style: none; color: var(--text-secondary); font-size: 0.86rem; display: grid; gap: 0.4rem;">
+            <li>• Robo Wars: <strong>Stage Garden</strong></li>
+            <li>• Code Clash: <strong>Conclave Centre</strong></li>
+            <li>• Circuitrix: <strong>J115, 1st Floor, Electronics Dept.</strong></li>
+            <li>• Tech Quiz: <strong>Colloquium Hall</strong></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="font-family: var(--font-display); font-size: 0.95rem; color: var(--accent-mint); margin-bottom: 0.6rem;">COORDINATOR DESK</h4>
+          <div style="display: flex; flex-direction: column; align-items: flex-start;">
+            <a href="tel:+916260875232" class="contact-chip">📞 +91 6260875232</a>
+            <a href="mailto:26el1pi83@mitsgwl.ac.in" class="contact-chip">✉️ 26el1pi83@mitsgwl.ac.in</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="max-width: 1240px; margin: 2rem auto 0; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">
+        <span>© 2026 ELECTRONICS CLUB, MITS GWALIOR</span>
+        <span>DEADLINE: 20 DEC 2026 • FEST: 25 DEC 2026</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Event Rules Modal -->
+  <div class="modal-backdrop" id="rulesModal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="event-code" id="modalEventCode">ARENA RULES</span>
+        <button type="button" id="closeModalBtn" style="background: none; border: none; color: var(--text-secondary); font-size: 1.4rem; cursor: pointer;">✕</button>
+      </div>
+      <h3 id="modalEventTitle" style="font-family: var(--font-display); font-size: 1.45rem; margin-top: 0.65rem; color: var(--accent-mint);"></h3>
+      <p id="modalEventVenue" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan); margin-top: 0.25rem;"></p>
+      <ul id="modalRulesList"></ul>
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+        <button type="button" class="btn btn-outline btn-sm" id="modalCancelBtn">Close</button>
+        <button type="button" class="btn btn-primary btn-sm" id="modalRegisterBtn">Register for this Event</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Main Application Script (Firebase Ready + Demo Fallback) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      onSnapshot,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyCYjzcyZO4DjJXdZmktW-mN0NXTo3xhhdQ",
+      authDomain: "technova2026-80eb4.firebaseapp.com",
+      projectId: "technova2026-80eb4",
+      storageBucket: "technova2026-80eb4.firebasestorage.app",
+      messagingSenderId: "213227531150",
+      appId: "1:213227531150:web:8084a6ec321edad3d0d2df"
+    };
+
+    // Color-Coded Event Catalog
+    const EVENTS = [
+      {
+        id: "Robo Wars",
+        code: "BOT-01",
+        icon: "🤖",
+        accent: "#FFB800",
+        accentDim: "rgba(255, 184, 0, 0.14)",
+        venue: "Stage Garden",
+        type: "Individual / Team (Max 4)",
+        deadline: "20 Dec 2026",
+        desc: "Build and pilot wired or wireless combat bots in a high-impact arena showdown to immobilize or outscore opponents.",
+        rules: [
+          "Participation allowed as Individual or Team (maximum 4 members).",
+          "Maximum bot weight limit: 8 kg (with 5% tolerance); max voltage 24V DC.",
+          "Flame, liquid, and projectile weapons are strictly prohibited.",
+          "Each match lasts 3 minutes; arena judges' decisions are final."
+        ]
+      },
+      {
+        id: "Code Clash",
+        code: "ALG-02",
+        icon: "💻",
+        accent: "#00D4FF",
+        accentDim: "rgba(0, 212, 255, 0.14)",
+        venue: "Conclave Centre",
+        type: "Individual / Team (Max 4)",
+        deadline: "20 Dec 2026",
+        desc: "High-speed algorithmic problem solving, bitwise optimization, and logic debugging under intense clock pressure.",
+        rules: [
+          "Open to Individual participants or Teams of up to 4 members.",
+          "Supported languages: C, C++, Python, and Java.",
+          "Internet access is restricted to the contest judge portal only.",
+          "Tie-breakers are resolved by total submission penalty time."
+        ]
+      },
+      {
+        id: "Circuitrix",
+        code: "PCB-03",
+        icon: "⚡",
+        accent: "#00F5A0",
+        accentDim: "rgba(0, 245, 160, 0.14)",
+        venue: "J115, 1st Floor, Electronics Dept.",
+        type: "Individual / Team (Max 4)",
+        deadline: "20 Dec 2026",
+        desc: "Diagnose faulty analog/digital circuits on live oscilloscopes and assemble clean breadboard prototypes against the timer.",
+        rules: [
+          "Open to Individual contenders or Teams (maximum 4 members).",
+          "Round 1: Component identification & faulty waveform analysis.",
+          "Round 2: Live breadboard circuit implementation using provided ICs.",
+          "Short-circuiting lab bench power supplies incurs negative points."
+        ]
+      },
+      {
+        id: "Tech Quiz",
+        code: "QIZ-04",
+        icon: "🧠",
+        accent: "#B57BFF",
+        accentDim: "rgba(181, 123, 255, 0.14)",
+        venue: "Colloquium Hall",
+        type: "Individual / Team (Max 4)",
+        deadline: "20 Dec 2026",
+        desc: "Battle of intellect covering semiconductor history, emerging AI hardware, space missions, and core electronics trivia.",
+        rules: [
+          "Compete solo or in a squad of up to 4 members.",
+          "Preliminary written elimination round followed by an on-stage buzzer finale.",
+          "Smartwatches and mobile phones must be switched off during rounds.",
+          "Negative marking applies on direct buzzer wrong answers."
+        ]
+      }
+    ];
+
+    const DEMO_REGISTRATIONS = [
+      {
+        regId: "TN26-1042",
+        fullName: "Aarav Sharma",
+        enrollmentNo: "26EL1AR12",
+        collegeEmail: "26el1ar12@mitsgwl.ac.in",
+        contactNumber: "9826011223",
+        department: "Electronics Engineering",
+        year: "2nd Year",
+        event: "Robo Wars",
+        venue: "Stage Garden",
+        participationType: "Team",
+        teamName: "MechaTitans",
+        teamSize: 3,
+        members: [
+          { name: "Rohan Verma", enrollmentNo: "26EL1RV29", mobile: "9826044556" },
+          { name: "Sneha Gupta", enrollmentNo: "26ET1SG14", mobile: "9826077889" }
+        ],
+        createdAt: "2026-11-18T10:15:00.000Z"
+      },
+      {
+        regId: "TN26-2089",
+        fullName: "Ananya Jain",
+        enrollmentNo: "26CS1AJ45",
+        collegeEmail: "26cs1aj45@mitsgwl.ac.in",
+        contactNumber: "9179022334",
+        department: "Computer Science & Engineering",
+        year: "1st Year",
+        event: "Code Clash",
+        venue: "Conclave Centre",
+        participationType: "Individual",
+        teamName: "-",
+        teamSize: 1,
+        members: [],
+        createdAt: "2026-11-18T11:40:00.000Z"
+      },
+      {
+        regId: "TN26-3156",
+        fullName: "Devansh Tiwari",
+        enrollmentNo: "26EL1DT08",
+        collegeEmail: "26el1dt08@mitsgwl.ac.in",
+        contactNumber: "9425133445",
+        department: "Electronics Engineering",
+        year: "3rd Year",
+        event: "Circuitrix",
+        venue: "J115, 1st Floor, Electronics Dept.",
+        participationType: "Team",
+        teamName: "OscilloscopeX",
+        teamSize: 2,
+        members: [
+          { name: "Kunal Joshi", enrollmentNo: "26EL1KJ19", mobile: "9425199887" }
+        ],
+        createdAt: "2026-11-18T14:20:00.000Z"
+      }
+    ];
+
+    let registrations = [];
+    let db = null;
+    let useFirebase = false;
+    let latestGeneratedRecord = null;
+    const STORAGE_KEY = "technova_2026_registrations_v1";
+
+    async function initDatabase() {
+      const isConfigured =
+        FIREBASE_CONFIG.apiKey &&
+        FIREBASE_CONFIG.apiKey !== "YOUR_FIREBASE_API_KEY" &&
+        FIREBASE_CONFIG.projectId !== "YOUR_PROJECT_ID";
+
+      if (isConfigured) {
+        try {
+          const app = initializeApp(FIREBASE_CONFIG);
+          db = getFirestore(app);
+          useFirebase = true;
+          document.getElementById("dbStatusText").textContent = "FIREBASE LIVE";
+
+          const q = query(collection(db, "registrations"), orderBy("createdAt", "desc"));
+          onSnapshot(q, (snapshot) => {
+            registrations = snapshot.docs.map(doc => ({ docId: doc.id, ...doc.data() }));
+            renderOrganiserTable();
+          });
+          return;
+        } catch (err) {
+          console.error("Firebase init failed, falling back to local mode:", err);
+        }
+      }
+
+      useFirebase = false;
+      document.getElementById("dbStatusText").textContent = "DEMO MODE";
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        registrations = JSON.parse(saved);
+      } else {
+        registrations = [...DEMO_REGISTRATIONS];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(registrations));
+      }
+      renderOrganiserTable();
+    }
+
+    async function saveRegistration(record) {
+      if (useFirebase && db) {
+        await addDoc(collection(db, "registrations"), record);
+      } else {
+        registrations.unshift(record);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(registrations));
+        renderOrganiserTable();
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3200);
+    }
+
+    // QR Code Generator Helper
+    function renderQrInto(element, record) {
+      if (!element) return;
+      element.innerHTML = "";
+      const payload = `TECHNOVA2026|${record.regId}|${record.enrollmentNo}|${record.event}`;
+      if (typeof window.QRCode !== "undefined") {
+        new window.QRCode(element, {
+          text: payload,
+          width: 88,
+          height: 88,
+          colorDark: "#060A12",
+          colorLight: "#FFFFFF",
+          correctLevel: window.QRCode.CorrectLevel.M
+        });
+      } else {
+        element.innerHTML = `<div style="font-family:var(--font-mono);font-size:0.65rem;color:#060A12;padding:6px;">${record.regId}</div>`;
+      }
+    }
+
+    // Download VIP Pass as PNG Canvas
+    function downloadPassPng(record) {
+      if (!record) return;
+      const canvas = document.createElement("canvas");
+      canvas.width = 760;
+      canvas.height = 380;
+      const ctx = canvas.getContext("2d");
+
+      // Background
+      const grad = ctx.createLinearGradient(0, 0, 760, 380);
+      grad.addColorStop(0, "#060A12");
+      grad.addColorStop(1, "#0D182A");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 760, 380);
+
+      // Border
+      ctx.strokeStyle = "#00F5A0";
+      ctx.lineWidth = 4;
+      ctx.strokeRect(14, 14, 732, 352);
+
+      // Header Band
+      ctx.fillStyle = "#FFB800";
+      ctx.font = "bold 24px sans-serif";
+      ctx.fillText("TECHNOVA 2026 • VIP ENTRY PASS", 40, 62);
+
+      ctx.fillStyle = "#94A3B8";
+      ctx.font = "15px monospace";
+      ctx.fillText("ELECTRONICS CLUB • MITS GWALIOR • 25 DEC 2026", 40, 88);
+
+      // Divider
+      ctx.strokeStyle = "rgba(255, 184, 0, 0.4)";
+      ctx.setLineDash([8, 6]);
+      ctx.beginPath();
+      ctx.moveTo(40, 108);
+      ctx.lineTo(720, 108);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Details
+      ctx.fillStyle = "#00F5A0";
+      ctx.font = "bold 32px monospace";
+      ctx.fillText(record.regId, 40, 155);
+
+      ctx.fillStyle = "#F1F5F9";
+      ctx.font = "bold 20px sans-serif";
+      ctx.fillText(`Participant: ${record.fullName} (${record.enrollmentNo})`, 40, 200);
+
+      ctx.fillStyle = "#00D4FF";
+      ctx.font = "18px sans-serif";
+      ctx.fillText(`Event: ${record.event} | Venue: ${record.venue}`, 40, 236);
+
+      ctx.fillStyle = "#94A3B8";
+      ctx.font = "16px sans-serif";
+      const modeText = record.participationType === "Team"
+        ? `Team: ${record.teamName} (${record.teamSize} Members)`
+        : "Mode: Individual (Solo)";
+      ctx.fillText(modeText, 40, 270);
+
+      ctx.fillStyle = "#64748B";
+      ctx.font = "13px monospace";
+      ctx.fillText("Carry valid MITS ID card. Report 30 mins prior to event slot.", 40, 332);
+
+      // Embed QR image if available
+      const qrImg = document.querySelector("#ticketQrCode img");
+      if (qrImg && qrImg.src) {
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(566, 138, 144, 144);
+        ctx.drawImage(qrImg, 574, 146, 128, 128);
+      }
+
+      const link = document.createElement("a");
+      link.download = `${record.regId}_TECHNOVA2026_Pass.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      showToast(`Saved ${record.regId} VIP Pass PNG!`);
+    }
+
+    document.getElementById("downloadPassBtn").addEventListener("click", () => {
+      downloadPassPng(latestGeneratedRecord);
+    });
+
+    // Render Color-Coded Events Grid with Staggered Reveal
+    function renderEvents() {
+      const grid = document.getElementById("eventsGrid");
+      grid.innerHTML = EVENTS.map((ev, idx) => `
+        <article class="event-card reveal" data-event="${ev.id}" style="--card-accent: ${ev.accent}; --card-accent-dim: ${ev.accentDim}; transition-delay: ${idx * 90}ms;">
+          <div>
+            <div class="event-top">
+              <div class="event-icon">${ev.icon}</div>
+              <span class="event-code">${ev.code}</span>
+            </div>
+            <h3 class="event-title">${ev.id}</h3>
+            <p class="event-desc">${ev.desc}</p>
+          </div>
+          <div>
+            <div class="event-specs">
+              <div class="spec-row">
+                <span class="spec-key">VENUE</span>
+                <span class="spec-val venue">${ev.venue}</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-key">MODE</span>
+                <span class="spec-val">${ev.type}</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-key">DEADLINE</span>
+                <span class="spec-val" style="color: var(--accent-gold);">${ev.deadline}</span>
+              </div>
+            </div>
+            <div class="event-actions">
+              <button type="button" class="btn btn-outline btn-sm rules-btn" data-event="${ev.id}">Rules</button>
+              <button type="button" class="btn btn-primary btn-sm select-event-btn" data-event="${ev.id}">Register</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+
+      document.querySelectorAll(".event-card").forEach(card => {
+        card.addEventListener("mousemove", (e) => {
+          if (window.innerWidth < 768) return;
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card.style.setProperty("--mouse-x", `${x}px`);
+          card.style.setProperty("--mouse-y", `${y}px`);
+          const rotateX = ((y / rect.height) - 0.5) * -8;
+          const rotateY = ((x / rect.width) - 0.5) * 8;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+        });
+
+        card.addEventListener("mouseleave", () => {
+          card.style.transform = "";
+        });
+      });
+
+      document.querySelectorAll(".rules-btn").forEach(btn => {
+        btn.addEventListener("click", () => openRulesModal(btn.dataset.event));
+      });
+
+      document.querySelectorAll(".select-event-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const card = btn.closest(".event-card");
+          card.classList.remove("pulse-click");
+          void card.offsetWidth;
+          card.classList.add("pulse-click");
+
+          const eventName = btn.dataset.event;
+          setTimeout(() => {
+            const eventSelect = document.getElementById("selectedEvent");
+            eventSelect.value = eventName;
+            document.getElementById("register").scrollIntoView({ behavior: "smooth" });
+            showToast(`Selected "${eventName}" — complete your details below.`);
+          }, 260);
+        });
+      });
+    }
+
+    // Rules Modal Logic
+    let activeModalEvent = null;
+    function openRulesModal(eventId) {
+      const ev = EVENTS.find(item => item.id === eventId);
+      if (!ev) return;
+      activeModalEvent = ev.id;
+      document.getElementById("modalEventCode").textContent = `${ev.code} • MAX TEAM SIZE: 4`;
+      document.getElementById("modalEventTitle").textContent = ev.id;
+      document.getElementById("modalEventVenue").textContent = `📍 Venue: ${ev.venue} | Deadline: ${ev.deadline}`;
+      document.getElementById("modalRulesList").innerHTML = ev.rules.map(r => `<li>${r}</li>`).join("");
+      document.getElementById("rulesModal").classList.add("active");
+    }
+
+    function closeRulesModal() {
+      document.getElementById("rulesModal").classList.remove("active");
+    }
+
+    document.getElementById("closeModalBtn").addEventListener("click", closeRulesModal);
+    document.getElementById("modalCancelBtn").addEventListener("click", closeRulesModal);
+    document.getElementById("modalRegisterBtn").addEventListener("click", () => {
+      if (activeModalEvent) {
+        document.getElementById("selectedEvent").value = activeModalEvent;
+        closeRulesModal();
+        document.getElementById("register").scrollIntoView({ behavior: "smooth" });
+      }
+    });
+
+    // Dynamic Team Members Rendering
+    const participationTypeEl = document.getElementById("participationType");
+    const teamSectionEl = document.getElementById("teamSection");
+    const teamSizeEl = document.getElementById("teamSize");
+    const teamMembersContainer = document.getElementById("teamMembersContainer");
+
+    function renderTeamMemberFields() {
+      const totalSize = parseInt(teamSizeEl.value, 10) || 2;
+      const extraMembers = totalSize - 1;
+      let html = "";
+      for (let i = 2; i <= extraMembers + 1; i++) {
+        html += `
+          <div class="team-member-card" data-member-index="${i}">
+            <span class="member-badge">// TEAM MEMBER ${i} DETAILS</span>
+            <div class="member-fields">
+              <div class="form-group">
+                <label>Full Name <span class="req">*</span></label>
+                <input type="text" class="tm-name" placeholder="Member ${i} Name">
+                <span class="error-msg tm-err-name"></span>
+              </div>
+              <div class="form-group">
+                <label>Enrollment Number <span class="req">*</span></label>
+                <input type="text" class="tm-enroll" placeholder="e.g., 26EL1XX00" style="text-transform: uppercase;">
+                <span class="error-msg tm-err-enroll"></span>
+              </div>
+              <div class="form-group">
+                <label>Mobile Number <span class="req">*</span></label>
+                <input type="tel" class="tm-mobile" placeholder="10-digit mobile" maxlength="10">
+                <span class="error-msg tm-err-mobile"></span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      teamMembersContainer.innerHTML = html;
+    }
+
+    participationTypeEl.addEventListener("change", () => {
+      if (participationTypeEl.value === "Team") {
+        teamSectionEl.classList.add("active");
+        renderTeamMemberFields();
+      } else {
+        teamSectionEl.classList.remove("active");
+      }
+    });
+
+    teamSizeEl.addEventListener("change", renderTeamMemberFields);
+
+    // Form Validation & Duplicate Prevention
+    function setFieldError(id, msg) {
+      const input = document.getElementById(id);
+      const err = document.getElementById(`err-${id}`);
+      if (input) input.classList.toggle("invalid", Boolean(msg));
+      if (err) err.textContent = msg;
+    }
+
+    function generateUniqueId() {
+      let id;
+      do {
+        const num = Math.floor(1000 + Math.random() * 9000);
+        id = `TN26-${num}`;
+      } while (registrations.some(r => r.regId === id));
+      return id;
+    }
+
+    document.getElementById("registrationForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      let isValid = true;
+
+      const fullName = document.getElementById("fullName").value.trim();
+      const enrollmentNo = document.getElementById("enrollmentNo").value.trim().toUpperCase();
+      const collegeEmail = document.getElementById("collegeEmail").value.trim().toLowerCase();
+      const contactNumber = document.getElementById("contactNumber").value.trim();
+      const department = document.getElementById("department").value;
+      const year = document.getElementById("year").value;
+      const selectedEvent = document.getElementById("selectedEvent").value;
+      const participationType = participationTypeEl.value;
+
+      ["fullName", "enrollmentNo", "collegeEmail", "contactNumber", "department", "year", "selectedEvent", "teamName"].forEach(id => setFieldError(id, ""));
+
+      if (fullName.length < 3) { setFieldError("fullName", "Enter valid full name."); isValid = false; }
+      if (!/^[A-Z0-9]{6,15}$/.test(enrollmentNo)) { setFieldError("enrollmentNo", "Enter valid enrollment number (e.g. 26EL1PI83)."); isValid = false; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(collegeEmail)) { setFieldError("collegeEmail", "Enter a valid college email."); isValid = false; }
+      if (!/^[6-9]\d{9}$/.test(contactNumber)) { setFieldError("contactNumber", "Enter valid 10-digit Indian mobile number."); isValid = false; }
+      if (!department) { setFieldError("department", "Select your department."); isValid = false; }
+      if (!year) { setFieldError("year", "Select your academic year."); isValid = false; }
+      if (!selectedEvent) { setFieldError("selectedEvent", "Select an event."); isValid = false; }
+
+      let teamName = "-";
+      let teamSize = 1;
+      const members = [];
+      const seenEnrollments = new Set([enrollmentNo]);
+
+      if (participationType === "Team") {
+        teamName = document.getElementById("teamName").value.trim();
+        teamSize = parseInt(teamSizeEl.value, 10);
+        if (teamName.length < 2) {
+          setFieldError("teamName", "Enter a team name.");
+          isValid = false;
+        }
+
+        document.querySelectorAll(".team-member-card").forEach(card => {
+          const mNameEl = card.querySelector(".tm-name");
+          const mEnrollEl = card.querySelector(".tm-enroll");
+          const mMobileEl = card.querySelector(".tm-mobile");
+
+          const errName = card.querySelector(".tm-err-name");
+          const errEnroll = card.querySelector(".tm-err-enroll");
+          const errMobile = card.querySelector(".tm-err-mobile");
+
+          errName.textContent = "";
+          errEnroll.textContent = "";
+          errMobile.textContent = "";
+
+          const mName = mNameEl.value.trim();
+          const mEnroll = mEnrollEl.value.trim().toUpperCase();
+          const mMobile = mMobileEl.value.trim();
+
+          if (mName.length < 2) { errName.textContent = "Required"; isValid = false; }
+          if (!/^[A-Z0-9]{6,15}$/.test(mEnroll)) {
+            errEnroll.textContent = "Invalid ID";
+            isValid = false;
+          } else if (seenEnrollments.has(mEnroll)) {
+            errEnroll.textContent = "Duplicate in team";
+            isValid = false;
+          } else {
+            seenEnrollments.add(mEnroll);
+          }
+
+          if (!/^[6-9]\d{9}$/.test(mMobile)) { errMobile.textContent = "10-digit mobile"; isValid = false; }
+
+          members.push({ name: mName, enrollmentNo: mEnroll, mobile: mMobile });
+        });
+      }
+
+      if (!isValid) {
+        showToast("Please fix highlighted errors before submitting.");
+        return;
+      }
+
+      const sameEventRegs = registrations.filter(r => r.event === selectedEvent);
+      for (const existing of sameEventRegs) {
+        const existingEnrolls = [
+          existing.enrollmentNo,
+          ...(existing.members || []).map(m => m.enrollmentNo)
+        ];
+
+        const conflictEnroll = [...seenEnrollments].find(en => existingEnrolls.includes(en));
+        if (conflictEnroll) {
+          setFieldError("enrollmentNo", `Enrollment ${conflictEnroll} is already registered for ${selectedEvent}.`);
+          showToast(`Duplicate blocked: ${conflictEnroll} already registered in ${selectedEvent}!`);
+          return;
+        }
+
+        if (existing.collegeEmail.toLowerCase() === collegeEmail) {
+          setFieldError("collegeEmail", `Email already registered for ${selectedEvent} (ID: ${existing.regId}).`);
+          showToast(`Duplicate blocked: Email already registered for ${selectedEvent}!`);
+          return;
+        }
+      }
+
+      const eventMeta = EVENTS.find(ev => ev.id === selectedEvent);
+      const regId = generateUniqueId();
+
+      const newRecord = {
+        regId,
+        fullName,
+        enrollmentNo,
+        collegeEmail,
+        contactNumber,
+        department,
+        year,
+        event: selectedEvent,
+        venue: eventMeta ? eventMeta.venue : "MITS Campus",
+        participationType,
+        teamName,
+        teamSize,
+        members,
+        createdAt: new Date().toISOString()
+      };
+
+      const submitBtn = document.getElementById("submitBtn");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Generating VIP Pass...";
+
+      try {
+        await saveRegistration(newRecord);
+        latestGeneratedRecord = newRecord;
+
+        document.getElementById("generatedRegId").textContent = regId;
+        document.getElementById("ticketSummary").innerHTML = `
+          <p><strong>Participant:</strong> ${fullName} (${enrollmentNo})</p>
+          <p><strong>Event:</strong> ${selectedEvent} • <strong>Venue:</strong> <span style="color: var(--accent-cyan);">${newRecord.venue}</span></p>
+          <p><strong>Mode:</strong> ${participationType}${participationType === "Team" ? ` — Team "${teamName}" (${teamSize} Members)` : ""}</p>
+        `;
+        renderQrInto(document.getElementById("ticketQrCode"), newRecord);
+        document.getElementById("ticketBox").classList.add("active");
+        document.getElementById("registrationForm").reset();
+        teamSectionEl.classList.remove("active");
+        showToast(`Success! VIP Pass ${regId} generated.`);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Confirm & Generate VIP Pass";
+      }
+    });
+
+    document.getElementById("copyIdBtn").addEventListener("click", () => {
+      const idText = document.getElementById("generatedRegId").textContent;
+      navigator.clipboard.writeText(idText);
+      showToast(`Copied ${idText} to clipboard!`);
+    });
+
+    // My Registrations Lookup with Live QR Cards
+    function handleLookup() {
+      const queryStr = document.getElementById("lookupInput").value.trim().toLowerCase();
+      const container = document.getElementById("lookupResults");
+      if (!queryStr) {
+        showToast("Enter a Registration ID, Email, or Enrollment Number.");
+        return;
+      }
+
+      const matches = registrations.filter(r => {
+        const memberEnrolls = (r.members || []).map(m => m.enrollmentNo.toLowerCase());
+        return (
+          r.regId.toLowerCase() === queryStr ||
+          r.collegeEmail.toLowerCase() === queryStr ||
+          r.enrollmentNo.toLowerCase() === queryStr ||
+          memberEnrolls.includes(queryStr)
+        );
+      });
+
+      if (matches.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color: var(--accent-danger); grid-column: 1/-1;">No registration found matching "${queryStr}".</p>`;
+        return;
+      }
+
+      container.innerHTML = matches.map((r, i) => `
+        <div class="pass-card">
+          <div class="pass-card-header">
+            <span style="font-family: var(--font-display); color: var(--accent-gold); font-weight: 700;">${r.regId}</span>
+            <span class="event-code">${r.event}</span>
+          </div>
+          <div class="pass-card-grid">
+            <div>
+              <p style="font-size: 0.9rem;"><strong>Lead:</strong> ${r.fullName} (${r.enrollmentNo})</p>
+              <p style="font-size: 0.86rem; color: var(--accent-cyan);"><strong>Venue:</strong> ${r.venue}</p>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);"><strong>Mode:</strong> ${r.participationType} ${r.participationType === "Team" ? `(${r.teamName} • ${r.teamSize} Members)` : ""}</p>
+            </div>
+            <div class="qr-box" id="lookup-qr-${i}"></div>
+          </div>
+          ${r.members && r.members.length ? `
+            <div style="margin-top: 0.75rem; padding-top: 0.65rem; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem; color: var(--text-secondary);">
+              <strong>Teammates:</strong><br>
+              ${r.members.map(m => `• ${m.name} (${m.enrollmentNo})`).join("<br>")}
+            </div>
+          ` : ""}
+        </div>
+      `).join("");
+
+      matches.forEach((r, i) => {
+        renderQrInto(document.getElementById(`lookup-qr-${i}`), r);
+      });
+    }
+
+    document.getElementById("lookupBtn").addEventListener("click", handleLookup);
+    document.getElementById("lookupInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") handleLookup();
+    });
+
+    // Organiser Authentication & Console
+    const ORG_USER = "piyush123";
+    const ORG_PASS = "Piyush@135";
+
+    document.getElementById("orgLoginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const u = document.getElementById("orgUser").value.trim();
+      const p = document.getElementById("orgPass").value;
+      const err = document.getElementById("orgLoginError");
+
+      if (u === ORG_USER && p === ORG_PASS) {
+        err.textContent = "";
+        document.getElementById("orgLockBox").style.display = "none";
+        document.getElementById("orgDashboard").classList.add("active");
+        renderOrganiserTable();
+        showToast("Organiser Console Unlocked.");
+      } else {
+        err.textContent = "Access Denied: Invalid username or password.";
+      }
+    });
+
+    document.getElementById("orgLogoutBtn").addEventListener("click", () => {
+      document.getElementById("orgDashboard").classList.remove("active");
+      document.getElementById("orgLockBox").style.display = "block";
+      document.getElementById("orgLoginForm").reset();
+      showToast("Organiser Console Locked.");
+    });
+
+    function getFilteredRegistrations() {
+      const search = (document.getElementById("orgSearchInput").value || "").trim().toLowerCase();
+      const eventFilter = document.getElementById("orgEventFilter").value;
+
+      return registrations.filter(r => {
+        const matchesEvent = eventFilter === "ALL" || r.event === eventFilter;
+        if (!matchesEvent) return false;
+        if (!search) return true;
+
+        const rosterStr = (r.members || []).map(m => `${m.name} ${m.enrollmentNo} ${m.mobile}`).join(" ").toLowerCase();
+        return (
+          r.regId.toLowerCase().includes(search) ||
+          r.fullName.toLowerCase().includes(search) ||
+          r.enrollmentNo.toLowerCase().includes(search) ||
+          r.collegeEmail.toLowerCase().includes(search) ||
+          (r.teamName || "").toLowerCase().includes(search) ||
+          rosterStr.includes(search)
+        );
+      });
+    }
+
+    function renderOrganiserTable() {
+      const statsRow = document.getElementById("orgStatsRow");
+      if (statsRow) {
+        const counts = EVENTS.map(ev => ({
+          name: ev.id,
+          count: registrations.filter(r => r.event === ev.id).length
+        }));
+        statsRow.innerHTML = `
+          <div class="stat-card">
+            <div class="meta-label">Total Entries</div>
+            <div class="stat-num" style="color: var(--accent-gold);">${registrations.length}</div>
+          </div>
+          ${counts.map(c => `
+            <div class="stat-card">
+              <div class="meta-label">${c.name}</div>
+              <div class="stat-num">${c.count}</div>
+            </div>
+          `).join("")}
+        `;
+      }
+
+      const tbody = document.getElementById("orgTableBody");
+      if (!tbody) return;
+      const list = getFilteredRegistrations();
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-muted); padding: 1.5rem;">No matching registrations found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(r => `
+        <tr>
+          <td style="font-family: var(--font-mono); color: var(--accent-gold); font-weight: 700;">${r.regId}</td>
+          <td>
+            <strong>${r.event}</strong><br>
+            <span style="font-size: 0.76rem; color: var(--accent-cyan);">${r.venue}</span>
+          </td>
+          <td>
+            ${r.participationType}<br>
+            ${r.participationType === "Team" ? `<span style="color: var(--accent-mint); font-size: 0.78rem;">${r.teamName} (${r.teamSize})</span>` : `<span style="color: var(--text-muted); font-size: 0.78rem;">Solo</span>`}
+          </td>
+          <td>${r.fullName}</td>
+          <td>
+            <span style="font-family: var(--font-mono);">${r.enrollmentNo}</span><br>
+            <span style="font-size: 0.76rem; color: var(--text-secondary);">${r.department} (${r.year})</span>
+          </td>
+          <td>
+            ${r.contactNumber}<br>
+            <span style="font-size: 0.76rem; color: var(--text-secondary);">${r.collegeEmail}</span>
+          </td>
+          <td style="font-size: 0.78rem; color: var(--text-secondary);">
+            ${r.members && r.members.length
+              ? r.members.map((m, idx) => `M${idx + 2}: ${m.name} (${m.enrollmentNo}, ${m.mobile})`).join("<br>")
+              : "—"}
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    document.getElementById("orgSearchInput").addEventListener("input", renderOrganiserTable);
+    document.getElementById("orgEventFilter").addEventListener("change", renderOrganiserTable);
+
+    document.getElementById("exportCsvBtn").addEventListener("click", () => {
+      const list = getFilteredRegistrations();
+      if (list.length === 0) {
+        showToast("No rows available to export.");
+        return;
+      }
+
+      const headers = [
+        "Registration ID",
+        "Event",
+        "Venue",
+        "Participation Type",
+        "Team Name",
+        "Team Size",
+        "Lead Name",
+        "Lead Enrollment",
+        "College Email",
+        "Contact Number",
+        "Department",
+        "Year",
+        "Additional Members"
+      ];
+
+      const rows = list.map(r => {
+        const membersStr = (r.members || [])
+          .map(m => `${m.name} [${m.enrollmentNo} | ${m.mobile}]`)
+          .join(" ; ");
+        return [
+          r.regId,
+          r.event,
+          r.venue,
+          r.participationType,
+          r.teamName || "-",
+          r.teamSize || 1,
+          r.fullName,
+          r.enrollmentNo,
+          r.collegeEmail,
+          r.contactNumber,
+          r.department,
+          r.year,
+          membersStr || "None"
+        ].map(val => `"${String(val).replace(/"/g, '""')}"`).join(",");
+      });
+
+      const csvContent = [headers.join(","), ...rows].join("\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `TECHNOVA_2026_Registrations_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast(`Exported ${list.length} records to CSV.`);
+    });
+
+    // Live Countdown Timer with Pulse Tick on Seconds
+    function updateCountdown() {
+      const target = new Date("December 25, 2026 09:30:00").getTime();
+      const now = Date.now();
+      const diff = Math.max(0, target - now);
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const mins = Math.floor((diff / 1000 / 60) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+
+      document.getElementById("cd-days").textContent = String(days).padStart(2, "0");
+      document.getElementById("cd-hours").textContent = String(hours).padStart(2, "0");
+      document.getElementById("cd-mins").textContent = String(mins).padStart(2, "0");
+
+      const secsEl = document.getElementById("cd-secs");
+      const nextSecs = String(secs).padStart(2, "0");
+      if (secsEl.textContent !== nextSecs) {
+        secsEl.textContent = nextSecs;
+        secsEl.classList.add("tick");
+        setTimeout(() => secsEl.classList.remove("tick"), 180);
+      }
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // FAQ Accordion
+    document.querySelectorAll(".faq-q").forEach(btn => {
+      btn.addEventListener("click", () => {
+        btn.parentElement.classList.toggle("open");
+      });
+    });
+
+    // Mobile Menu Toggle
+    document.getElementById("mobileMenuBtn").addEventListener("click", () => {
+      document.getElementById("navLinks").classList.toggle("open");
+    });
+
+    // Scroll Reveal & Navbar Scroll-Spy
+    function initScrollObservers() {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+
+      const navAnchors = document.querySelectorAll(".nav-links a");
+      const sections = document.querySelectorAll("section[id]");
+
+      window.addEventListener("scroll", () => {
+        let currentId = "";
+        sections.forEach(sec => {
+          const top = sec.offsetTop - 130;
+          if (window.scrollY >= top) currentId = sec.getAttribute("id");
+        });
+        navAnchors.forEach(a => {
+          a.classList.toggle("active", a.getAttribute("href") === `#${currentId}`);
+        });
+      }, { passive: true });
+    }
+
+    // Cursor-Reactive PCB Trace Canvas Animation
+    function initPcbCanvas() {
+      const canvas = document.getElementById("pcb-canvas");
+      const ctx = canvas.getContext("2d");
+      let w, h, nodes = [];
+      const pointer = { x: -9999, y: -9999 };
+
+      window.addEventListener("mousemove", (e) => {
+        pointer.x = e.clientX;
+        pointer.y = e.clientY;
+      }, { passive: true });
+
+      window.addEventListener("mouseleave", () => {
+        pointer.x = -9999;
+        pointer.y = -9999;
+      });
+
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        nodes = Array.from({ length: Math.min(44, Math.floor(w / 32)) }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          color: Math.random() > 0.35 ? "#00F5A0" : "#FFB800"
+        }));
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+
+        // Subtle PCB Grid
+        ctx.strokeStyle = "rgba(0, 245, 160, 0.032)";
+        ctx.lineWidth = 1;
+        const step = 64;
+        for (let x = 0; x < w; x += step) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let y = 0; y < h; y += step) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        // Cursor Spotlight Halo
+        if (pointer.x > 0 && pointer.y > 0) {
+          const halo = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, 190);
+          halo.addColorStop(0, "rgba(0, 245, 160, 0.09)");
+          halo.addColorStop(1, "rgba(0, 245, 160, 0)");
+          ctx.fillStyle = halo;
+          ctx.fillRect(0, 0, w, h);
+        }
+
+        // Orthogonal Circuit Traces between Nodes & Cursor
+        for (let i = 0; i < nodes.length; i++) {
+          const a = nodes[i];
+          a.x += a.vx;
+          a.y += a.vy;
+          if (a.x < 0 || a.x > w) a.vx *= -1;
+          if (a.y < 0 || a.y > h) a.vy *= -1;
+
+          // Connect node to cursor with golden PCB trace
+          const ptrDist = Math.hypot(a.x - pointer.x, a.y - pointer.y);
+          if (ptrDist < 190) {
+            const alpha = (1 - ptrDist / 190) * 0.55;
+            ctx.strokeStyle = `rgba(255, 184, 0, ${alpha})`;
+            ctx.lineWidth = 1.3;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(pointer.x, a.y);
+            ctx.lineTo(pointer.x, pointer.y);
+            ctx.stroke();
+          }
+
+          for (let j = i + 1; j < nodes.length; j++) {
+            const b = nodes[j];
+            const dist = Math.hypot(a.x - b.x, a.y - b.y);
+            if (dist < 155) {
+              ctx.strokeStyle = `rgba(0, 245, 160, ${(1 - dist / 155) * 0.16})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.stroke();
+            }
+          }
+
+          const nearCursor = ptrDist < 190;
+          ctx.fillStyle = nearCursor ? "#FFB800" : a.color;
+          ctx.beginPath();
+          ctx.arc(a.x, a.y, nearCursor ? 3.4 : 2.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener("resize", resize);
+      resize();
+      draw();
+    }
+
+    // Initialize Everything
+    renderEvents();
+    initScrollObservers();
+    initPcbCanvas();
+    initDatabase();
+  </script>
+</body>
+</html>
